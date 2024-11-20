@@ -64,17 +64,18 @@ void LCD_Clear(void) {
 }
 
 void LCD_Init(void) {
+    LCD_Comm(0x38); // DDRAM, 8 bit data 사용, lCD 2열로 사용
+    LCD_delay(2);   // 2ms delay
     LCD_Comm(0x38);
     LCD_delay(2);
     LCD_Comm(0x38);
     LCD_delay(2);
-    LCD_Comm(0x38);
+    // 중요 초기 설정이라 3회 반복
+    LCD_Comm(0x0E); // LCD 화면 ON, 커서 on, 문자 점멸 off
     LCD_delay(2);
-    LCD_Comm(0x0e);
-    LCD_delay(2);
-    LCD_Comm(0x01);
+    LCD_Comm(0x01); // Clear Display
     LCD_delay(30);
-    LCD_Comm(0x06);
+    LCD_Comm(0x06); // entry mode set (l->R 커서 이동, 화면 shift 없음)
     LCD_delay(2);
 }
 
