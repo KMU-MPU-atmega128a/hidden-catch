@@ -273,7 +273,7 @@
  012E 02E0              ldi R16,2
  0130 67DF              xcall _LCD_delay#Fvh
  0132                   .dbline 74
- 0132 0EE0              ldi R16,14
+ 0132 0CE0              ldi R16,12
  0134 94DF              xcall _LCD_Comm#Fvh
  0136                   .dbline 75
  0136 02E0              ldi R16,2

@@ -71,7 +71,7 @@ void LCD_Init(void) {
     LCD_Comm(0x38);
     LCD_delay(2);
     // 중요 초기 설정이라 3회 반복
-    LCD_Comm(0x0E); // LCD 화면 ON, 커서 on, 문자 점멸 off
+    LCD_Comm(0x0C); // LCD 화면 ON, 커서 off, 문자 점멸 off (커서 on: 0x0E)
     LCD_delay(2);
     LCD_Comm(0x01); // Clear Display
     LCD_delay(30);

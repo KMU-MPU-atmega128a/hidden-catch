@@ -5,257 +5,6 @@ NOTE: Code bytes are displayed in order matching the disassembly format in AVR d
 Interrupt Vectors
 
 Program Code (text area)
-_LCD_delay:
-  ms                   --> R10
-    000A5 92AA      ST	-Y,R10
-    000A6 2EA0      MOV	R10,R16
-FILE: C:\Users\user\Desktop\hidden-catch\lcd.c
-(0001) #include "lcd.h"
-(0002) 
-(0003) void LCD_delay(Byte ms) { delay_ms(ms); }   // LCD time delay
-    000A7 2D0A      MOV	R16,R10
-    000A8 2711      CLR	R17
-    000A9 940E 0257 CALL	_delay_ms
-    000AB 90A9      LD	R10,Y+
-    000AC 9508      RET
-(0004) 
-(0005) void PortInit(void) {
-(0006)     DDRA = 0xFF;    // PORTA to output mode
-_PortInit:
-    000AD EF8F      LDI	R24,0xFF
-    000AE BB8A      OUT	0x1A,R24
-(0007)     DDRG = 0x0F;    // PORTG 0~3 to output mode
-    000AF E08F      LDI	R24,0xF
-    000B0 9380 0064 STS	0x64,R24
-    000B2 9508      RET
-(0008) }
-_LCD_Data:
-  ch                   --> R10
-    000B3 92AA      ST	-Y,R10
-    000B4 2EA0      MOV	R10,R16
-(0009) 
-(0010) void LCD_Data(Byte ch) {
-(0011)     LCD_CTRL |=  (1 << LCD_RS); // RS  = 1
-    000B5 9180 0065 LDS	R24,0x65
-    000B7 6084      ORI	R24,4
-    000B8 9380 0065 STS	0x65,R24
-(0012)     LCD_CTRL &= ~(1 << LCD_RW); // R/W = 0 -> Enter data write cycle
-    000BA 9180 0065 LDS	R24,0x65
-    000BC 7F8D      ANDI	R24,0xFD
-    000BD 9380 0065 STS	0x65,R24
-(0013)     LCD_CTRL |=  (1 << LCD_EN); // enable LCD
-    000BF 9180 0065 LDS	R24,0x65
-    000C1 6081      ORI	R24,1
-    000C2 9380 0065 STS	0x65,R24
-(0014)     delay_us(50);
-    000C4 E302      LDI	R16,0x32
-    000C5 E010      LDI	R17,0
-    000C6 940E 026E CALL	_delay_us
-(0015) 
-(0016)     LCD_WDATA = ch;             // Write DATA
-    000C8 BAAB      OUT	0x1B,R10
-(0017)     delay_us(50);
-    000C9 E302      LDI	R16,0x32
-    000CA E010      LDI	R17,0
-    000CB 940E 026E CALL	_delay_us
-(0018) 
-(0019)     LCD_CTRL &= ~(1 << LCD_EN); // disable LCD
-    000CD 9180 0065 LDS	R24,0x65
-    000CF 7F8E      ANDI	R24,0xFE
-    000D0 9380 0065 STS	0x65,R24
-    000D2 90A9      LD	R10,Y+
-    000D3 9508      RET
-(0020) }   // Write Data to LCD Data Register (CGRAM, DDRAM)
-_LCD_Comm:
-  ch                   --> R10
-    000D4 92AA      ST	-Y,R10
-    000D5 2EA0      MOV	R10,R16
-(0021) 
-(0022) void LCD_Comm(Byte ch) {
-(0023)     LCD_CTRL &= ~(1 << LCD_RS); // RS  = 0
-    000D6 9180 0065 LDS	R24,0x65
-    000D8 7F8B      ANDI	R24,0xFB
-    000D9 9380 0065 STS	0x65,R24
-(0024)     LCD_CTRL &= ~(1 << LCD_RW); // R/W = 0 -> Enter instruction write cycle
-    000DB 9180 0065 LDS	R24,0x65
-    000DD 7F8D      ANDI	R24,0xFD
-    000DE 9380 0065 STS	0x65,R24
-(0025)     LCD_CTRL |=  (1 << LCD_EN); // enable LCD
-    000E0 9180 0065 LDS	R24,0x65
-    000E2 6081      ORI	R24,1
-    000E3 9380 0065 STS	0x65,R24
-(0026)     delay_us(50);
-    000E5 E302      LDI	R16,0x32
-    000E6 E010      LDI	R17,0
-    000E7 940E 026E CALL	_delay_us
-(0027) 
-(0028)     LCD_WINST = ch;             // Write INSTruction
-    000E9 BAAB      OUT	0x1B,R10
-(0029)     delay_us(50);
-    000EA E302      LDI	R16,0x32
-    000EB E010      LDI	R17,0
-    000EC 940E 026E CALL	_delay_us
-(0030) 
-(0031)     LCD_CTRL &= ~(1 << LCD_EN); // disable LCD
-    000EE 9180 0065 LDS	R24,0x65
-    000F0 7F8E      ANDI	R24,0xFE
-    000F1 9380 0065 STS	0x65,R24
-    000F3 90A9      LD	R10,Y+
-    000F4 9508      RET
-(0032) }   // Write Instruction to LCD Instruction Register (CGRAM, DDRAM)
-_LCD_Shift:
-  p                    --> R20
-    000F5 934A      ST	-Y,R20
-    000F6 2F40      MOV	R20,R16
-(0033) 
-(0034) void LCD_Shift(char p) { // *
-(0035)     if (p == RIGHT) {
-    000F7 3041      CPI	R20,1
-    000F8 F429      BNE	0x00FE
-(0036)         LCD_Comm(0x1C);         // command: 0b00011100
-    000F9 E10C      LDI	R16,0x1C
-    000FA DFD9      RCALL	_LCD_Comm
-(0037)         LCD_delay(1);
-    000FB E001      LDI	R16,1
-    000FC DFA8      RCALL	_LCD_delay
-(0038)     }
-    000FD C006      RJMP	0x0104
-(0039)     else if (p == LEFT) {
-    000FE 2344      TST	R20
-    000FF F421      BNE	0x0104
-(0040)         LCD_Comm(0x18);         // command: 0b00011000
-    00100 E108      LDI	R16,0x18
-    00101 DFD2      RCALL	_LCD_Comm
-(0041)         LCD_delay(1);
-    00102 E001      LDI	R16,1
-    00103 DFA1      RCALL	_LCD_delay
-    00104 9149      LD	R20,Y+
-    00105 9508      RET
-(0042)     }
-(0043) }
-_LCD_CHAR:
-  c                    --> R10
-    00106 92AA      ST	-Y,R10
-    00107 2EA0      MOV	R10,R16
-(0044) 
-(0045) void LCD_CHAR(Byte c) {
-(0046)     LCD_delay(1);
-    00108 E001      LDI	R16,1
-    00109 DF9B      RCALL	_LCD_delay
-(0047)     LCD_Data(c);    // write char data C
-    0010A 2D0A      MOV	R16,R10
-    0010B DFA7      RCALL	_LCD_Data
-    0010C 90A9      LD	R10,Y+
-    0010D 9508      RET
-(0048) }
-_LCD_STR:
-  str                  --> R20
-    0010E 934A      ST	-Y,R20
-    0010F 935A      ST	-Y,R21
-    00110 01A8      MOVW	R20,R16
-(0049) 
-(0050) void LCD_STR(Byte *str) {
-    00111 C005      RJMP	0x0117
-(0051)     while (*str != 0) {
-(0052)         LCD_CHAR(*str); // write string data 'str'
-    00112 01FA      MOVW	R30,R20
-    00113 8100      LD	R16,Z
-    00114 DFF1      RCALL	_LCD_CHAR
-(0053)         str++;
-    00115 5F4F      SUBI	R20,0xFF
-    00116 4F5F      SBCI	R21,0xFF
-    00117 01FA      MOVW	R30,R20
-    00118 8020      LD	R2,Z
-    00119 2022      TST	R2
-    0011A F7B9      BNE	0x0112
-    0011B 9159      LD	R21,Y+
-    0011C 9149      LD	R20,Y+
-    0011D 9508      RET
-(0054)     }
-(0055) }
-_LCD_pos:
-  col                  --> R10
-  row                  --> R12
-    0011E 92AA      ST	-Y,R10
-    0011F 92CA      ST	-Y,R12
-    00120 2EA2      MOV	R10,R18
-    00121 2EC0      MOV	R12,R16
-(0056) 
-(0057) void LCD_pos(unsigned char row, unsigned char col) {
-(0058)     LCD_Comm(0x80 | (row * 0x40 + col));
-    00122 2D2C      MOV	R18,R12
-    00123 2733      CLR	R19
-    00124 E400      LDI	R16,0x40
-    00125 E010      LDI	R17,0
-    00126 940E 0285 CALL	<LIBRARY>|empy16s
-    00128 0D0A      ADD	R16,R10
-    00129 6800      ORI	R16,0x80
-    0012A DFA9      RCALL	_LCD_Comm
-    0012B 90C9      LD	R12,Y+
-    0012C 90A9      LD	R10,Y+
-    0012D 9508      RET
-(0059) }
-(0060) 
-(0061) void LCD_Clear(void) {
-(0062)     LCD_Comm(0x01);
-_LCD_Clear:
-    0012E E001      LDI	R16,1
-    0012F DFA4      RCALL	_LCD_Comm
-(0063)     LCD_delay(2);
-    00130 E002      LDI	R16,2
-    00131 CF73      RJMP	_LCD_delay
-(0064) }
-(0065) 
-(0066) void LCD_Init(void) {
-(0067)     LCD_Comm(0x38); // DDRAM, 8 bit data 사용, lCD 2열로 사용
-_LCD_Init:
-    00132 E308      LDI	R16,0x38
-    00133 DFA0      RCALL	_LCD_Comm
-(0068)     LCD_delay(2);   // 2ms delay
-    00134 E002      LDI	R16,2
-    00135 DF6F      RCALL	_LCD_delay
-(0069)     LCD_Comm(0x38);
-    00136 E308      LDI	R16,0x38
-    00137 DF9C      RCALL	_LCD_Comm
-(0070)     LCD_delay(2);
-    00138 E002      LDI	R16,2
-    00139 DF6B      RCALL	_LCD_delay
-(0071)     LCD_Comm(0x38);
-    0013A E308      LDI	R16,0x38
-    0013B DF98      RCALL	_LCD_Comm
-(0072)     LCD_delay(2);
-    0013C E002      LDI	R16,2
-    0013D DF67      RCALL	_LCD_delay
-(0073)     // 중요 초기 설정이라 3회 반복
-(0074)     LCD_Comm(0x0E); // LCD 화면 ON, 커서 on, 문자 점멸 off
-    0013E E00E      LDI	R16,0xE
-    0013F DF94      RCALL	_LCD_Comm
-(0075)     LCD_delay(2);
-    00140 E002      LDI	R16,2
-    00141 DF63      RCALL	_LCD_delay
-(0076)     LCD_Comm(0x01); // Clear Display
-    00142 E001      LDI	R16,1
-    00143 DF90      RCALL	_LCD_Comm
-(0077)     LCD_delay(30);
-    00144 E10E      LDI	R16,0x1E
-    00145 DF5F      RCALL	_LCD_delay
-(0078)     LCD_Comm(0x06); // entry mode set (l->R 커서 이동, 화면 shift 없음)
-    00146 E006      LDI	R16,6
-    00147 DF8C      RCALL	_LCD_Comm
-(0079)     LCD_delay(2);
-    00148 E002      LDI	R16,2
-    00149 CF5B      RJMP	_LCD_delay
-(0080) }
-(0081) 
-(0082) void Cursor_Home(void) {
-(0083)     LCD_Comm(0x02); // move LCD cursor to home
-_Cursor_Home:
-    0014A E002      LDI	R16,2
-    0014B DF88      RCALL	_LCD_Comm
-(0084)     LCD_delay(2);
-    0014C E002      LDI	R16,2
-    0014D CF57      RJMP	_LCD_delay
-(0085) }
 _CGRAM_set_menu:
   i                    --> R20
   i                    --> R20
@@ -269,321 +18,895 @@ _CGRAM_set_menu:
   menu3                --> Y,+16
   menu2                --> Y,+8
   menu1                --> Y,+0
-    0014E 934A      ST	-Y,R20
-    0014F 935A      ST	-Y,R21
-    00150 97E0      SBIW	R28,0x30
-    0014F 935A      ST	-Y,R21
-    00150 97E0      SBIW	R28,0x30
-FILE: C:\Users\user\Desktop\hidden-catch\main.c
-(0001) #include <iom128v.h>
-(0002) #include "my128.h"
-(0003) #include "lcd.h"
-(0004) 
-(0005) void CGRAM_set_menu(void) { // 초기 화면 함수 ("다른문자찾기" 출력)
-(0006)     Byte menu1[] = {0x02, 0x1E, 0x12, 0x13, 0x12, 0x1E, 0x02, 0x02};
-    00151 ED84      LDI	R24,0xD4
-    00152 E090      LDI	R25,0
-    00153 01FE      MOVW	R30,R28
-    00154 E008      LDI	R16,0x8
-    00155 E010      LDI	R17,0
-    00156 93FA      ST	-Y,R31
-    00157 93EA      ST	-Y,R30
-    00158 939A      ST	-Y,R25
-    00159 938A      ST	-Y,R24
-    0015A 940E 029F CALL	asgncblkx
-(0007)     Byte menu2[] = {0x0E, 0x02, 0x0E, 0x08, 0x0E, 0x1F, 0x08, 0x0E};
-    0015C ED8C      LDI	R24,0xDC
-    0015D E090      LDI	R25,0
-    0015E 01FE      MOVW	R30,R28
-    0015F 9638      ADIW	R30,0x8
-    00160 E008      LDI	R16,0x8
-    00161 E010      LDI	R17,0
-    00162 93FA      ST	-Y,R31
-    00163 93EA      ST	-Y,R30
-    00164 939A      ST	-Y,R25
-    00165 938A      ST	-Y,R24
-    00166 940E 029F CALL	asgncblkx
-(0008)     Byte menu3[] = {0x0E, 0x0A, 0x0E, 0x00, 0x1F, 0x04, 0x08, 0x0E};
-    00168 EE84      LDI	R24,0xE4
-    00169 E090      LDI	R25,0
-    0016A 01FE      MOVW	R30,R28
-    0016B 9670      ADIW	R30,0x10
-    0016C E008      LDI	R16,0x8
-    0016D E010      LDI	R17,0
-    0016E 93FA      ST	-Y,R31
-    0016F 93EA      ST	-Y,R30
-    00170 939A      ST	-Y,R25
-    00171 938A      ST	-Y,R24
-    00172 940E 029F CALL	asgncblkx
-(0009)     Byte menu4[] = {0x02, 0x1E, 0x0A, 0x17, 0x16, 0x02, 0x02, 0x00};
-    00174 EE8C      LDI	R24,0xEC
-    00175 E090      LDI	R25,0
-    00176 01FE      MOVW	R30,R28
-    00177 9678      ADIW	R30,0x18
-    00178 E008      LDI	R16,0x8
-    00179 E010      LDI	R17,0
-    0017A 93FA      ST	-Y,R31
-    0017B 93EA      ST	-Y,R30
-    0017C 939A      ST	-Y,R25
-    0017D 938A      ST	-Y,R24
-    0017E 940E 029F CALL	asgncblkx
-(0010)     Byte menu5[] = {0x0A, 0x1E, 0x0B, 0x16, 0x02, 0x0E, 0x04, 0x0A};
-    00180 EF84      LDI	R24,0xF4
-    00181 E090      LDI	R25,0
-    00182 01FE      MOVW	R30,R28
-    00183 96B0      ADIW	R30,0x20
-    00184 E008      LDI	R16,0x8
-    00185 E010      LDI	R17,0
-    00186 93FA      ST	-Y,R31
-    00187 93EA      ST	-Y,R30
-    00188 939A      ST	-Y,R25
-    00189 938A      ST	-Y,R24
-    0018A 940E 029F CALL	asgncblkx
-(0011)     Byte menu6[] = {0x02, 0x1A, 0x0A, 0x0A, 0x0A, 0x0A, 0x02, 0x02};
-    0018C EF8C      LDI	R24,0xFC
-    0018D E090      LDI	R25,0
-    0018E 01FE      MOVW	R30,R28
-    0018F 96B8      ADIW	R30,0x28
-    00190 E008      LDI	R16,0x8
-    00191 E010      LDI	R17,0
-    00192 93FA      ST	-Y,R31
-    00193 93EA      ST	-Y,R30
-    00194 939A      ST	-Y,R25
-    00195 938A      ST	-Y,R24
-    00196 940E 029F CALL	asgncblkx
-(0012) 
-(0013)     LCD_Comm(0x40); // CGRAM 주소: 0b01 000000
-    00198 E400      LDI	R16,0x40
-    00199 940E 00D4 CALL	_LCD_Comm
-(0014)     LCD_delay(1);
-    0019B E001      LDI	R16,1
-    0019C 940E 00A5 CALL	_LCD_delay
-(0015)     for (int i = 0; i < 8; i++) {
-    0019E 2744      CLR	R20
-    0019F 2755      CLR	R21
-    001A0 C00C      RJMP	0x01AD
-(0016)         LCD_Data(menu1[i]);
-    001A1 01CE      MOVW	R24,R28
-    001A2 01FA      MOVW	R30,R20
-    001A3 0FE8      ADD	R30,R24
-    001A4 1FF9      ADC	R31,R25
-    001A5 8100      LD	R16,Z
-    001A6 940E 00B3 CALL	_LCD_Data
-(0017)         LCD_delay(1);
-    001A8 E001      LDI	R16,1
-    001A9 940E 00A5 CALL	_LCD_delay
-    001AB 5F4F      SUBI	R20,0xFF
-    001AC 4F5F      SBCI	R21,0xFF
-    001AD E088      LDI	R24,0x8
-    001AE E090      LDI	R25,0
-    001AF 1748      CP	R20,R24
-    001B0 0759      CPC	R21,R25
-    001B1 F37C      BLT	0x01A1
-(0018)     }
-(0019) 
-(0020)     LCD_Comm(0x48); // CGRAM 주소: 0b01 001000
-    001B2 E408      LDI	R16,0x48
-    001B3 940E 00D4 CALL	_LCD_Comm
-(0021)     LCD_delay(1);
-    001B5 E001      LDI	R16,1
-    001B6 940E 00A5 CALL	_LCD_delay
-(0022)     for (int i = 0; i < 8; i++) {
-    001B8 2744      CLR	R20
-    001B9 2755      CLR	R21
-    001BA C00D      RJMP	0x01C8
-(0023)         LCD_Data(menu2[i]);
-    001BB 01CE      MOVW	R24,R28
-    001BC 9608      ADIW	R24,0x8
-    001BD 01FA      MOVW	R30,R20
-    001BE 0FE8      ADD	R30,R24
-    001BF 1FF9      ADC	R31,R25
-    001C0 8100      LD	R16,Z
-    001C1 940E 00B3 CALL	_LCD_Data
-(0024)         LCD_delay(1);
-    001C3 E001      LDI	R16,1
-    001C4 940E 00A5 CALL	_LCD_delay
-    001C6 5F4F      SUBI	R20,0xFF
-    001C7 4F5F      SBCI	R21,0xFF
-    001C8 E088      LDI	R24,0x8
-    001C9 E090      LDI	R25,0
-    001CA 1748      CP	R20,R24
-    001CB 0759      CPC	R21,R25
-    001CC F374      BLT	0x01BB
-(0025)     }
-(0026) 
-(0027)     LCD_Comm(0x50); // CGRAM 주소: 0b01 010000
-    001CD E500      LDI	R16,0x50
-    001CE 940E 00D4 CALL	_LCD_Comm
-(0028)     LCD_delay(1);
-    001D0 E001      LDI	R16,1
-    001D1 940E 00A5 CALL	_LCD_delay
-(0029)     for (int i = 0; i < 8; i++) {
-    001D3 2744      CLR	R20
-    001D4 2755      CLR	R21
-    001D5 C00D      RJMP	0x01E3
-(0030)         LCD_Data(menu3[i]);
-    001D6 01CE      MOVW	R24,R28
-    001D7 9640      ADIW	R24,0x10
-    001D8 01FA      MOVW	R30,R20
-    001D9 0FE8      ADD	R30,R24
-    001DA 1FF9      ADC	R31,R25
-    001DB 8100      LD	R16,Z
-    001DC 940E 00B3 CALL	_LCD_Data
-(0031)         LCD_delay(1);
-    001DE E001      LDI	R16,1
-    001DF 940E 00A5 CALL	_LCD_delay
-    001E1 5F4F      SUBI	R20,0xFF
-    001E2 4F5F      SBCI	R21,0xFF
-    001E3 E088      LDI	R24,0x8
-    001E4 E090      LDI	R25,0
-    001E5 1748      CP	R20,R24
-    001E6 0759      CPC	R21,R25
-    001E7 F374      BLT	0x01D6
-(0032)     }
-(0033) 
-(0034)     LCD_Comm(0x58); // CGRAM 주소: 0b01 011000
-    001E8 E508      LDI	R16,0x58
-    001E9 940E 00D4 CALL	_LCD_Comm
-(0035)     LCD_delay(1);
-    001EB E001      LDI	R16,1
-    001EC 940E 00A5 CALL	_LCD_delay
-(0036)     for (int i = 0; i < 8; i++) {
-    001EE 2744      CLR	R20
-    001EF 2755      CLR	R21
-    001F0 C00D      RJMP	0x01FE
-(0037)         LCD_Data(menu4[i]);
-    001F1 01CE      MOVW	R24,R28
-    001F2 9648      ADIW	R24,0x18
-    001F3 01FA      MOVW	R30,R20
-    001F4 0FE8      ADD	R30,R24
-    001F5 1FF9      ADC	R31,R25
-    001F6 8100      LD	R16,Z
-    001F7 940E 00B3 CALL	_LCD_Data
-(0038)         LCD_delay(1);
-    001F9 E001      LDI	R16,1
-    001FA 940E 00A5 CALL	_LCD_delay
-    001FC 5F4F      SUBI	R20,0xFF
-    001FD 4F5F      SBCI	R21,0xFF
-    001FE E088      LDI	R24,0x8
-    001FF E090      LDI	R25,0
-    00200 1748      CP	R20,R24
-    00201 0759      CPC	R21,R25
-    00202 F374      BLT	0x01F1
-(0039)     }
-(0040) 
-(0041)     LCD_Comm(0x60); // CGRAM 주소: 0b01 100000
-    00203 E600      LDI	R16,0x60
-    00204 940E 00D4 CALL	_LCD_Comm
-(0042)     LCD_delay(1);
-    00206 E001      LDI	R16,1
-    00207 940E 00A5 CALL	_LCD_delay
-(0043)     for (int i = 0; i < 8; i++) {
-    00209 2744      CLR	R20
-    0020A 2755      CLR	R21
-    0020B C00D      RJMP	0x0219
-(0044)         LCD_Data(menu5[i]);
-    0020C 01CE      MOVW	R24,R28
-    0020D 9680      ADIW	R24,0x20
-    0020E 01FA      MOVW	R30,R20
-    0020F 0FE8      ADD	R30,R24
-    00210 1FF9      ADC	R31,R25
-    00211 8100      LD	R16,Z
-    00212 940E 00B3 CALL	_LCD_Data
-(0045)         LCD_delay(1);
-    00214 E001      LDI	R16,1
-    00215 940E 00A5 CALL	_LCD_delay
-    00217 5F4F      SUBI	R20,0xFF
-    00218 4F5F      SBCI	R21,0xFF
-    00219 E088      LDI	R24,0x8
-    0021A E090      LDI	R25,0
-    0021B 1748      CP	R20,R24
-    0021C 0759      CPC	R21,R25
-    0021D F374      BLT	0x020C
-(0046)     }
-(0047) 
-(0048)     LCD_Comm(0x68); // CGRAM 주소: 0b01 101000
-    0021E E608      LDI	R16,0x68
-    0021F 940E 00D4 CALL	_LCD_Comm
-(0049)     LCD_delay(1);
-    00221 E001      LDI	R16,1
-    00222 940E 00A5 CALL	_LCD_delay
-(0050)     for (int i = 0; i < 8; i++) {
-    00224 2744      CLR	R20
-    00225 2755      CLR	R21
-    00226 C00D      RJMP	0x0234
-(0051)         LCD_Data(menu6[i]);
-    00227 01CE      MOVW	R24,R28
-    00228 9688      ADIW	R24,0x28
-    00229 01FA      MOVW	R30,R20
-    0022A 0FE8      ADD	R30,R24
-    0022B 1FF9      ADC	R31,R25
-    0022C 8100      LD	R16,Z
-    0022D 940E 00B3 CALL	_LCD_Data
-(0052)         LCD_delay(1);
-    0022F E001      LDI	R16,1
-    00230 940E 00A5 CALL	_LCD_delay
-    00232 5F4F      SUBI	R20,0xFF
-    00233 4F5F      SBCI	R21,0xFF
-    00234 E088      LDI	R24,0x8
-    00235 E090      LDI	R25,0
-    00236 1748      CP	R20,R24
-    00237 0759      CPC	R21,R25
-    00238 F374      BLT	0x0227
-    00239 96E0      ADIW	R28,0x30
-    0023A 9159      LD	R21,Y+
-    0023B 9149      LD	R20,Y+
-    0023C 9508      RET
-(0053)     }
-(0054) }
+    000C6 934A      ST	-Y,R20
+    000C7 935A      ST	-Y,R21
+    000C8 97E0      SBIW	R28,0x30
+FILE: C:\Users\user\Desktop\hidden-catch\cgram.c
+(0001) #include "cgram.h"
+(0002) 
+(0003) void CGRAM_set_menu(void) { // 초기 화면 함수 ("다른문자찾기" 출력)
+(0004)     Byte menu1[] = {0x02, 0x1E, 0x12, 0x13, 0x12, 0x1E, 0x02, 0x02};
+    000C9 ED84      LDI	R24,0xD4
+    000CA E090      LDI	R25,0
+    000CB 01FE      MOVW	R30,R28
+    000CC E008      LDI	R16,0x8
+    000CD E010      LDI	R17,0
+    000CE 93FA      ST	-Y,R31
+    000CF 93EA      ST	-Y,R30
+    000D0 939A      ST	-Y,R25
+    000D1 938A      ST	-Y,R24
+    000D2 940E 047B CALL	asgncblkx
+(0005)     Byte menu2[] = {0x0E, 0x02, 0x0E, 0x08, 0x0E, 0x1F, 0x08, 0x0E};
+    000D4 ED8C      LDI	R24,0xDC
+    000D5 E090      LDI	R25,0
+    000D6 01FE      MOVW	R30,R28
+    000D7 9638      ADIW	R30,0x8
+    000D8 E008      LDI	R16,0x8
+    000D9 E010      LDI	R17,0
+    000DA 93FA      ST	-Y,R31
+    000DB 93EA      ST	-Y,R30
+    000DC 939A      ST	-Y,R25
+    000DD 938A      ST	-Y,R24
+    000DE 940E 047B CALL	asgncblkx
+(0006)     Byte menu3[] = {0x0E, 0x0A, 0x0E, 0x00, 0x1F, 0x04, 0x08, 0x0E};
+    000E0 EE84      LDI	R24,0xE4
+    000E1 E090      LDI	R25,0
+    000E2 01FE      MOVW	R30,R28
+    000E3 9670      ADIW	R30,0x10
+    000E4 E008      LDI	R16,0x8
+    000E5 E010      LDI	R17,0
+    000E6 93FA      ST	-Y,R31
+    000E7 93EA      ST	-Y,R30
+    000E8 939A      ST	-Y,R25
+    000E9 938A      ST	-Y,R24
+    000EA 940E 047B CALL	asgncblkx
+(0007)     Byte menu4[] = {0x02, 0x1E, 0x0A, 0x17, 0x16, 0x02, 0x02, 0x00};
+    000EC EE8C      LDI	R24,0xEC
+    000ED E090      LDI	R25,0
+    000EE 01FE      MOVW	R30,R28
+    000EF 9678      ADIW	R30,0x18
+    000F0 E008      LDI	R16,0x8
+    000F1 E010      LDI	R17,0
+    000F2 93FA      ST	-Y,R31
+    000F3 93EA      ST	-Y,R30
+    000F4 939A      ST	-Y,R25
+    000F5 938A      ST	-Y,R24
+    000F6 940E 047B CALL	asgncblkx
+(0008)     Byte menu5[] = {0x0A, 0x1E, 0x0B, 0x16, 0x02, 0x0E, 0x04, 0x0A};
+    000F8 EF84      LDI	R24,0xF4
+    000F9 E090      LDI	R25,0
+    000FA 01FE      MOVW	R30,R28
+    000FB 96B0      ADIW	R30,0x20
+    000FC E008      LDI	R16,0x8
+    000FD E010      LDI	R17,0
+    000FE 93FA      ST	-Y,R31
+    000FF 93EA      ST	-Y,R30
+    00100 939A      ST	-Y,R25
+    00101 938A      ST	-Y,R24
+    00102 940E 047B CALL	asgncblkx
+(0009)     Byte menu6[] = {0x02, 0x1A, 0x0A, 0x0A, 0x0A, 0x0A, 0x02, 0x02};
+    00104 EF8C      LDI	R24,0xFC
+    00105 E090      LDI	R25,0
+    00106 01FE      MOVW	R30,R28
+    00107 96B8      ADIW	R30,0x28
+    00108 E008      LDI	R16,0x8
+    00109 E010      LDI	R17,0
+    0010A 93FA      ST	-Y,R31
+    0010B 93EA      ST	-Y,R30
+    0010C 939A      ST	-Y,R25
+    0010D 938A      ST	-Y,R24
+    0010E 940E 047B CALL	asgncblkx
+(0010) 
+(0011)     LCD_Comm(0x40); // CGRAM 주소: 0b01 000000
+    00110 E400      LDI	R16,0x40
+    00111 940E 01F2 CALL	_LCD_Comm
+(0012)     LCD_delay(1);
+    00113 E001      LDI	R16,1
+    00114 940E 01C3 CALL	_LCD_delay
+(0013)     for (int i = 0; i < 8; i++) {
+    00116 2744      CLR	R20
+    00117 2755      CLR	R21
+    00118 C00C      RJMP	0x0125
+(0014)         LCD_Data(menu1[i]);
+    00119 01CE      MOVW	R24,R28
+    0011A 01FA      MOVW	R30,R20
+    0011B 0FE8      ADD	R30,R24
+    0011C 1FF9      ADC	R31,R25
+    0011D 8100      LD	R16,Z
+    0011E 940E 01D1 CALL	_LCD_Data
+(0015)         LCD_delay(1);
+    00120 E001      LDI	R16,1
+    00121 940E 01C3 CALL	_LCD_delay
+    00123 5F4F      SUBI	R20,0xFF
+    00124 4F5F      SBCI	R21,0xFF
+    00125 E088      LDI	R24,0x8
+    00126 E090      LDI	R25,0
+    00127 1748      CP	R20,R24
+    00128 0759      CPC	R21,R25
+    00129 F37C      BLT	0x0119
+(0016)     }
+(0017) 
+(0018)     LCD_Comm(0x48); // CGRAM 주소: 0b01 001000
+    0012A E408      LDI	R16,0x48
+    0012B 940E 01F2 CALL	_LCD_Comm
+(0019)     LCD_delay(1);
+    0012D E001      LDI	R16,1
+    0012E 940E 01C3 CALL	_LCD_delay
+(0020)     for (int i = 0; i < 8; i++) {
+    00130 2744      CLR	R20
+    00131 2755      CLR	R21
+    00132 C00D      RJMP	0x0140
+(0021)         LCD_Data(menu2[i]);
+    00133 01CE      MOVW	R24,R28
+    00134 9608      ADIW	R24,0x8
+    00135 01FA      MOVW	R30,R20
+    00136 0FE8      ADD	R30,R24
+    00137 1FF9      ADC	R31,R25
+    00138 8100      LD	R16,Z
+    00139 940E 01D1 CALL	_LCD_Data
+(0022)         LCD_delay(1);
+    0013B E001      LDI	R16,1
+    0013C 940E 01C3 CALL	_LCD_delay
+    0013E 5F4F      SUBI	R20,0xFF
+    0013F 4F5F      SBCI	R21,0xFF
+    00140 E088      LDI	R24,0x8
+    00141 E090      LDI	R25,0
+    00142 1748      CP	R20,R24
+    00143 0759      CPC	R21,R25
+    00144 F374      BLT	0x0133
+(0023)     }
+(0024) 
+(0025)     LCD_Comm(0x50); // CGRAM 주소: 0b01 010000
+    00145 E500      LDI	R16,0x50
+    00146 940E 01F2 CALL	_LCD_Comm
+(0026)     LCD_delay(1);
+    00148 E001      LDI	R16,1
+    00149 940E 01C3 CALL	_LCD_delay
+(0027)     for (int i = 0; i < 8; i++) {
+    0014B 2744      CLR	R20
+    0014C 2755      CLR	R21
+    0014D C00D      RJMP	0x015B
+(0028)         LCD_Data(menu3[i]);
+    0014E 01CE      MOVW	R24,R28
+    0014F 9640      ADIW	R24,0x10
+    00150 01FA      MOVW	R30,R20
+    00151 0FE8      ADD	R30,R24
+    00152 1FF9      ADC	R31,R25
+    00153 8100      LD	R16,Z
+    00154 940E 01D1 CALL	_LCD_Data
+(0029)         LCD_delay(1);
+    00156 E001      LDI	R16,1
+    00157 940E 01C3 CALL	_LCD_delay
+    00159 5F4F      SUBI	R20,0xFF
+    0015A 4F5F      SBCI	R21,0xFF
+    0015B E088      LDI	R24,0x8
+    0015C E090      LDI	R25,0
+    0015D 1748      CP	R20,R24
+    0015E 0759      CPC	R21,R25
+    0015F F374      BLT	0x014E
+(0030)     }
+(0031) 
+(0032)     LCD_Comm(0x58); // CGRAM 주소: 0b01 011000
+    00160 E508      LDI	R16,0x58
+    00161 940E 01F2 CALL	_LCD_Comm
+(0033)     LCD_delay(1);
+    00163 E001      LDI	R16,1
+    00164 940E 01C3 CALL	_LCD_delay
+(0034)     for (int i = 0; i < 8; i++) {
+    00166 2744      CLR	R20
+    00167 2755      CLR	R21
+    00168 C00D      RJMP	0x0176
+(0035)         LCD_Data(menu4[i]);
+    00169 01CE      MOVW	R24,R28
+    0016A 9648      ADIW	R24,0x18
+    0016B 01FA      MOVW	R30,R20
+    0016C 0FE8      ADD	R30,R24
+    0016D 1FF9      ADC	R31,R25
+    0016E 8100      LD	R16,Z
+    0016F 940E 01D1 CALL	_LCD_Data
+(0036)         LCD_delay(1);
+    00171 E001      LDI	R16,1
+    00172 940E 01C3 CALL	_LCD_delay
+    00174 5F4F      SUBI	R20,0xFF
+    00175 4F5F      SBCI	R21,0xFF
+    00176 E088      LDI	R24,0x8
+    00177 E090      LDI	R25,0
+    00178 1748      CP	R20,R24
+    00179 0759      CPC	R21,R25
+    0017A F374      BLT	0x0169
+(0037)     }
+(0038) 
+(0039)     LCD_Comm(0x60); // CGRAM 주소: 0b01 100000
+    0017B E600      LDI	R16,0x60
+    0017C 940E 01F2 CALL	_LCD_Comm
+(0040)     LCD_delay(1);
+    0017E E001      LDI	R16,1
+    0017F 940E 01C3 CALL	_LCD_delay
+(0041)     for (int i = 0; i < 8; i++) {
+    00181 2744      CLR	R20
+    00182 2755      CLR	R21
+    00183 C00D      RJMP	0x0191
+(0042)         LCD_Data(menu5[i]);
+    00184 01CE      MOVW	R24,R28
+    00185 9680      ADIW	R24,0x20
+    00186 01FA      MOVW	R30,R20
+    00187 0FE8      ADD	R30,R24
+    00188 1FF9      ADC	R31,R25
+    00189 8100      LD	R16,Z
+    0018A 940E 01D1 CALL	_LCD_Data
+(0043)         LCD_delay(1);
+    0018C E001      LDI	R16,1
+    0018D 940E 01C3 CALL	_LCD_delay
+    0018F 5F4F      SUBI	R20,0xFF
+    00190 4F5F      SBCI	R21,0xFF
+    00191 E088      LDI	R24,0x8
+    00192 E090      LDI	R25,0
+    00193 1748      CP	R20,R24
+    00194 0759      CPC	R21,R25
+    00195 F374      BLT	0x0184
+(0044)     }
+(0045) 
+(0046)     LCD_Comm(0x68); // CGRAM 주소: 0b01 101000
+    00196 E608      LDI	R16,0x68
+    00197 940E 01F2 CALL	_LCD_Comm
+(0047)     LCD_delay(1);
+    00199 E001      LDI	R16,1
+    0019A 940E 01C3 CALL	_LCD_delay
+(0048)     for (int i = 0; i < 8; i++) {
+    0019C 2744      CLR	R20
+    0019D 2755      CLR	R21
+    0019E C00D      RJMP	0x01AC
+(0049)         LCD_Data(menu6[i]);
+    0019F 01CE      MOVW	R24,R28
+    001A0 9688      ADIW	R24,0x28
+    001A1 01FA      MOVW	R30,R20
+    001A2 0FE8      ADD	R30,R24
+    001A3 1FF9      ADC	R31,R25
+    001A4 8100      LD	R16,Z
+    001A5 940E 01D1 CALL	_LCD_Data
+(0050)         LCD_delay(1);
+    001A7 E001      LDI	R16,1
+    001A8 940E 01C3 CALL	_LCD_delay
+    001AA 5F4F      SUBI	R20,0xFF
+    001AB 4F5F      SBCI	R21,0xFF
+    001AC E088      LDI	R24,0x8
+    001AD E090      LDI	R25,0
+    001AE 1748      CP	R20,R24
+    001AF 0759      CPC	R21,R25
+    001B0 F374      BLT	0x019F
+    001B1 96E0      ADIW	R28,0x30
+    001B2 9159      LD	R21,Y+
+    001B3 9149      LD	R20,Y+
+    001B4 9508      RET
+(0051)     }
+(0052) }
 _LCD_menu:
   i                    --> R20
-    0023D 934A      ST	-Y,R20
-(0055) 
-(0056) void LCD_menu(void) {   // 초기 문자 "다른문자찾기" LCD에 출력
-(0057)     for (Byte i = 0x00; i < 0x06; i++) {
-    0023E 2744      CLR	R20
-    0023F C007      RJMP	0x0247
-(0058)         LCD_Data(i);
-    00240 2F04      MOV	R16,R20
-    00241 940E 00B3 CALL	_LCD_Data
-(0059)         LCD_delay(1);
-    00243 E001      LDI	R16,1
-    00244 940E 00A5 CALL	_LCD_delay
-    00246 9543      INC	R20
-    00247 3046      CPI	R20,6
-    00248 F3B8      BCS	0x0240
-    00249 9149      LD	R20,Y+
-    0024A 9508      RET
-(0060)     }
-(0061) }
+    001B5 934A      ST	-Y,R20
+(0053) 
+(0054) void LCD_menu(void) {   // 초기 문자 "다른문자찾기" LCD에 출력
+(0055)     for (Byte i = 0x00; i < 0x06; i++) {
+    001B6 2744      CLR	R20
+    001B7 C007      RJMP	0x01BF
+(0056)         LCD_Data(i);
+    001B8 2F04      MOV	R16,R20
+    001B9 940E 01D1 CALL	_LCD_Data
+(0057)         LCD_delay(1);
+    001BB E001      LDI	R16,1
+    001BC 940E 01C3 CALL	_LCD_delay
+    001BE 9543      INC	R20
+    001BF 3046      CPI	R20,6
+    001C0 F3B8      BCS	0x01B8
+    001C1 9149      LD	R20,Y+
+    001C2 9508      RET
+(0058)     }
+(0059) }
+_LCD_delay:
+  ms                   --> R10
+    001C3 92AA      ST	-Y,R10
+    001C4 2EA0      MOV	R10,R16
+    001C4 2EA0      MOV	R10,R16
+FILE: C:\Users\user\Desktop\hidden-catch\lcd.c
+(0001) #include "lcd.h"
+(0002) 
+(0003) void LCD_delay(Byte ms) { delay_ms(ms); }   // LCD time delay
+    001C5 2D0A      MOV	R16,R10
+    001C6 2711      CLR	R17
+    001C7 940E 038A CALL	_delay_ms
+    001C9 90A9      LD	R10,Y+
+    001CA 9508      RET
+(0004) 
+(0005) void PortInit(void) {
+(0006)     DDRA = 0xFF;    // PORTA to output mode
+_PortInit:
+    001CB EF8F      LDI	R24,0xFF
+    001CC BB8A      OUT	0x1A,R24
+(0007)     DDRG = 0x0F;    // PORTG 0~3 to output mode
+    001CD E08F      LDI	R24,0xF
+    001CE 9380 0064 STS	0x64,R24
+    001D0 9508      RET
+(0008) }
+_LCD_Data:
+  ch                   --> R10
+    001D1 92AA      ST	-Y,R10
+    001D2 2EA0      MOV	R10,R16
+(0009) 
+(0010) void LCD_Data(Byte ch) {
+(0011)     LCD_CTRL |=  (1 << LCD_RS); // RS  = 1
+    001D3 9180 0065 LDS	R24,0x65
+    001D5 6084      ORI	R24,4
+    001D6 9380 0065 STS	0x65,R24
+(0012)     LCD_CTRL &= ~(1 << LCD_RW); // R/W = 0 -> Enter data write cycle
+    001D8 9180 0065 LDS	R24,0x65
+    001DA 7F8D      ANDI	R24,0xFD
+    001DB 9380 0065 STS	0x65,R24
+(0013)     LCD_CTRL |=  (1 << LCD_EN); // enable LCD
+    001DD 9180 0065 LDS	R24,0x65
+    001DF 6081      ORI	R24,1
+    001E0 9380 0065 STS	0x65,R24
+(0014)     delay_us(50);
+    001E2 E302      LDI	R16,0x32
+    001E3 E010      LDI	R17,0
+    001E4 940E 03A1 CALL	_delay_us
+(0015) 
+(0016)     LCD_WDATA = ch;             // Write DATA
+    001E6 BAAB      OUT	0x1B,R10
+(0017)     delay_us(50);
+    001E7 E302      LDI	R16,0x32
+    001E8 E010      LDI	R17,0
+    001E9 940E 03A1 CALL	_delay_us
+(0018) 
+(0019)     LCD_CTRL &= ~(1 << LCD_EN); // disable LCD
+    001EB 9180 0065 LDS	R24,0x65
+    001ED 7F8E      ANDI	R24,0xFE
+    001EE 9380 0065 STS	0x65,R24
+    001F0 90A9      LD	R10,Y+
+    001F1 9508      RET
+(0020) }   // Write Data to LCD Data Register (CGRAM, DDRAM)
+_LCD_Comm:
+  ch                   --> R10
+    001F2 92AA      ST	-Y,R10
+    001F3 2EA0      MOV	R10,R16
+(0021) 
+(0022) void LCD_Comm(Byte ch) {
+(0023)     LCD_CTRL &= ~(1 << LCD_RS); // RS  = 0
+    001F4 9180 0065 LDS	R24,0x65
+    001F6 7F8B      ANDI	R24,0xFB
+    001F7 9380 0065 STS	0x65,R24
+(0024)     LCD_CTRL &= ~(1 << LCD_RW); // R/W = 0 -> Enter instruction write cycle
+    001F9 9180 0065 LDS	R24,0x65
+    001FB 7F8D      ANDI	R24,0xFD
+    001FC 9380 0065 STS	0x65,R24
+(0025)     LCD_CTRL |=  (1 << LCD_EN); // enable LCD
+    001FE 9180 0065 LDS	R24,0x65
+    00200 6081      ORI	R24,1
+    00201 9380 0065 STS	0x65,R24
+(0026)     delay_us(50);
+    00203 E302      LDI	R16,0x32
+    00204 E010      LDI	R17,0
+    00205 940E 03A1 CALL	_delay_us
+(0027) 
+(0028)     LCD_WINST = ch;             // Write INSTruction
+    00207 BAAB      OUT	0x1B,R10
+(0029)     delay_us(50);
+    00208 E302      LDI	R16,0x32
+    00209 E010      LDI	R17,0
+    0020A 940E 03A1 CALL	_delay_us
+(0030) 
+(0031)     LCD_CTRL &= ~(1 << LCD_EN); // disable LCD
+    0020C 9180 0065 LDS	R24,0x65
+    0020E 7F8E      ANDI	R24,0xFE
+    0020F 9380 0065 STS	0x65,R24
+    00211 90A9      LD	R10,Y+
+    00212 9508      RET
+(0032) }   // Write Instruction to LCD Instruction Register (CGRAM, DDRAM)
+_LCD_Shift:
+  p                    --> R20
+    00213 934A      ST	-Y,R20
+    00214 2F40      MOV	R20,R16
+(0033) 
+(0034) void LCD_Shift(char p) { // *
+(0035)     if (p == RIGHT) {
+    00215 3041      CPI	R20,1
+    00216 F429      BNE	0x021C
+(0036)         LCD_Comm(0x1C);         // command: 0b00011100
+    00217 E10C      LDI	R16,0x1C
+    00218 DFD9      RCALL	_LCD_Comm
+(0037)         LCD_delay(1);
+    00219 E001      LDI	R16,1
+    0021A DFA8      RCALL	_LCD_delay
+(0038)     }
+    0021B C006      RJMP	0x0222
+(0039)     else if (p == LEFT) {
+    0021C 2344      TST	R20
+    0021D F421      BNE	0x0222
+(0040)         LCD_Comm(0x18);         // command: 0b00011000
+    0021E E108      LDI	R16,0x18
+    0021F DFD2      RCALL	_LCD_Comm
+(0041)         LCD_delay(1);
+    00220 E001      LDI	R16,1
+    00221 DFA1      RCALL	_LCD_delay
+    00222 9149      LD	R20,Y+
+    00223 9508      RET
+(0042)     }
+(0043) }
+_LCD_CHAR:
+  c                    --> R10
+    00224 92AA      ST	-Y,R10
+    00225 2EA0      MOV	R10,R16
+(0044) 
+(0045) void LCD_CHAR(Byte c) {
+(0046)     LCD_delay(1);
+    00226 E001      LDI	R16,1
+    00227 DF9B      RCALL	_LCD_delay
+(0047)     LCD_Data(c);    // write char data C
+    00228 2D0A      MOV	R16,R10
+    00229 DFA7      RCALL	_LCD_Data
+    0022A 90A9      LD	R10,Y+
+    0022B 9508      RET
+(0048) }
+_LCD_STR:
+  str                  --> R20
+    0022C 934A      ST	-Y,R20
+    0022D 935A      ST	-Y,R21
+    0022E 01A8      MOVW	R20,R16
+(0049) 
+(0050) void LCD_STR(Byte *str) {
+    0022F C005      RJMP	0x0235
+(0051)     while (*str != 0) {
+(0052)         LCD_CHAR(*str); // write string data 'str'
+    00230 01FA      MOVW	R30,R20
+    00231 8100      LD	R16,Z
+    00232 DFF1      RCALL	_LCD_CHAR
+(0053)         str++;
+    00233 5F4F      SUBI	R20,0xFF
+    00234 4F5F      SBCI	R21,0xFF
+    00235 01FA      MOVW	R30,R20
+    00236 8020      LD	R2,Z
+    00237 2022      TST	R2
+    00238 F7B9      BNE	0x0230
+    00239 9159      LD	R21,Y+
+    0023A 9149      LD	R20,Y+
+    0023B 9508      RET
+(0054)     }
+(0055) }
+_LCD_pos:
+  col                  --> R10
+  row                  --> R12
+    0023C 92AA      ST	-Y,R10
+    0023D 92CA      ST	-Y,R12
+    0023E 2EA2      MOV	R10,R18
+    0023F 2EC0      MOV	R12,R16
+(0056) 
+(0057) void LCD_pos(unsigned char row, unsigned char col) {
+(0058)     LCD_Comm(0x80 | (row * 0x40 + col));
+    00240 2D2C      MOV	R18,R12
+    00241 2733      CLR	R19
+    00242 E400      LDI	R16,0x40
+    00243 E010      LDI	R17,0
+    00244 940E 03F2 CALL	empy16s
+    00246 0D0A      ADD	R16,R10
+    00247 6800      ORI	R16,0x80
+    00248 DFA9      RCALL	_LCD_Comm
+    00249 90C9      LD	R12,Y+
+    0024A 90A9      LD	R10,Y+
+    0024B 9508      RET
+(0059) }
+(0060) 
+(0061) void LCD_Clear(void) {
+(0062)     LCD_Comm(0x01);
+_LCD_Clear:
+    0024C E001      LDI	R16,1
+    0024D DFA4      RCALL	_LCD_Comm
+(0063)     LCD_delay(2);
+    0024E E002      LDI	R16,2
+    0024F CF73      RJMP	_LCD_delay
+(0064) }
+(0065) 
+(0066) void LCD_Init(void) {
+(0067)     LCD_Comm(0x38); // DDRAM, 8 bit data 사용, lCD 2열로 사용
+_LCD_Init:
+    00250 E308      LDI	R16,0x38
+    00251 DFA0      RCALL	_LCD_Comm
+(0068)     LCD_delay(2);   // 2ms delay
+    00252 E002      LDI	R16,2
+    00253 DF6F      RCALL	_LCD_delay
+(0069)     LCD_Comm(0x38);
+    00254 E308      LDI	R16,0x38
+    00255 DF9C      RCALL	_LCD_Comm
+(0070)     LCD_delay(2);
+    00256 E002      LDI	R16,2
+    00257 DF6B      RCALL	_LCD_delay
+(0071)     LCD_Comm(0x38);
+    00258 E308      LDI	R16,0x38
+    00259 DF98      RCALL	_LCD_Comm
+(0072)     LCD_delay(2);
+    0025A E002      LDI	R16,2
+    0025B DF67      RCALL	_LCD_delay
+(0073)     // 중요 초기 설정이라 3회 반복
+(0074)     LCD_Comm(0x0C); // LCD 화면 ON, 커서 off, 문자 점멸 off (커서 on: 0x0E)
+    0025C E00C      LDI	R16,0xC
+    0025D DF94      RCALL	_LCD_Comm
+(0075)     LCD_delay(2);
+    0025E E002      LDI	R16,2
+    0025F DF63      RCALL	_LCD_delay
+(0076)     LCD_Comm(0x01); // Clear Display
+    00260 E001      LDI	R16,1
+    00261 DF90      RCALL	_LCD_Comm
+(0077)     LCD_delay(30);
+    00262 E10E      LDI	R16,0x1E
+    00263 DF5F      RCALL	_LCD_delay
+(0078)     LCD_Comm(0x06); // entry mode set (l->R 커서 이동, 화면 shift 없음)
+    00264 E006      LDI	R16,6
+    00265 DF8C      RCALL	_LCD_Comm
+(0079)     LCD_delay(2);
+    00266 E002      LDI	R16,2
+    00267 CF5B      RJMP	_LCD_delay
+(0080) }
+(0081) 
+(0082) void Cursor_Home(void) {
+(0083)     LCD_Comm(0x02); // move LCD cursor to home
+_Cursor_Home:
+    00268 E002      LDI	R16,2
+    00269 DF88      RCALL	_LCD_Comm
+(0084)     LCD_delay(2);
+    0026A E002      LDI	R16,2
+    0026B CF57      RJMP	_LCD_delay
+(0085) }
+_Interrupt_init:
+    0026C B789      IN	R24,0x39
+    0026D 6081      ORI	R24,1
+    0026E BF89      OUT	0x39,R24
+    0026B CF57      RJMP	_LCD_delay
+FILE: C:\Users\user\Desktop\hidden-catch\main.c
+(0001) #include <iom128v.h>
+(0002) #include <stdlib.h> // rand() function usage
+(0003) #include "my128.h"
+(0004) #include "lcd.h"
+(0005) #include "cgram.h"
+(0006) 
+(0007) unsigned int score = 0; // 점수 저장하는 변수
+(0008) 
+(0009) int start_flag = 0;
+(0010) int q1_flag = 0;
+(0011) 
+(0012) 
+(0013) 
+(0014) void Interrupt_init(void) {
+(0015)     EIMSK |= 1 << INT0;          // INT0 버튼 인터럽트 허용
+_Interrupt_init:
+    0026C B789      IN	R24,0x39
+    0026D 6081      ORI	R24,1
+    0026E BF89      OUT	0x39,R24
+(0016)     EICRA |= 1 << ISC01 | 1 << ISC11 | 1 << ISC21 | 1 << ISC31;
+    0026F 9180 006A LDS	R24,0x6A
+    00271 6A8A      ORI	R24,0xAA
+    00272 9380 006A STS	0x6A,R24
+(0017)     // INT0~INT3 falling edge trigger 설정
+(0018)     EICRB |= 1 << ISC41 | 1 << ISC51 | 1 << ISC61 | 1 << ISC71;
+    00274 B78A      IN	R24,0x3A
+    00275 6A8A      ORI	R24,0xAA
+    00276 BF8A      OUT	0x3A,R24
+(0019)     // INT4~INT7 falling edge trigger 설정
+(0020)     SREG |= 0x80;           // 전역 인터럽트 허가
+    00277 9478      BSET	7
+    00278 9508      RET
+(0021) }
+(0022) 
+(0023) void LCD_game_start(void) {
+(0024)     if (start_flag) {
+    00279 9020 0102 LDS	R2,_start_flag
+    0027B 9030 0103 LDS	R3,_start_flag+1
+    0027D 2022      TST	R2
+    0027E F419      BNE	0x0282
+    0027F 2033      TST	R3
+    00280 F409      BNE	0x0282
+    00281 C044      RJMP	0x02C6
+(0025)         Cursor_Home();
+    00282 940E 0268 CALL	_Cursor_Home
+(0026)         LCD_STR("Starting in...");
+    00284 E20E      LDI	R16,0x2E
+    00285 E011      LDI	R17,1
+    00286 940E 022C CALL	_LCD_STR
+(0027)         LCD_pos(0,15);
+    00288 E02F      LDI	R18,0xF
+    00289 2700      CLR	R16
+    0028A 940E 023C CALL	_LCD_pos
+(0028)         LCD_STR("3");
+    0028C E20C      LDI	R16,0x2C
+    0028D E011      LDI	R17,1
+    0028E 940E 022C CALL	_LCD_STR
+(0029)         delay_ms(1000);
+    00290 EE08      LDI	R16,0xE8
+    00291 E013      LDI	R17,3
+    00292 940E 038A CALL	_delay_ms
+(0030) 
+(0031)         LCD_pos(0,15);
+    00294 E02F      LDI	R18,0xF
+    00295 2700      CLR	R16
+    00296 940E 023C CALL	_LCD_pos
+(0032)         LCD_STR("2");
+    00298 E20A      LDI	R16,0x2A
+    00299 E011      LDI	R17,1
+    0029A 940E 022C CALL	_LCD_STR
+(0033)         delay_ms(1000);
+    0029C EE08      LDI	R16,0xE8
+    0029D E013      LDI	R17,3
+    0029E 940E 038A CALL	_delay_ms
+(0034) 
+(0035)         LCD_pos(0,15);
+    002A0 E02F      LDI	R18,0xF
+    002A1 2700      CLR	R16
+    002A2 940E 023C CALL	_LCD_pos
+(0036)         LCD_STR("1");
+    002A4 E208      LDI	R16,0x28
+    002A5 E011      LDI	R17,1
+    002A6 940E 022C CALL	_LCD_STR
+(0037)         delay_ms(1000);
+    002A8 EE08      LDI	R16,0xE8
+    002A9 E013      LDI	R17,3
+    002AA 940E 038A CALL	_delay_ms
+(0038) 
+(0039)         LCD_Clear();
+    002AC 940E 024C CALL	_LCD_Clear
+(0040)         Cursor_Home();
+    002AE 940E 0268 CALL	_Cursor_Home
+(0041)         LCD_STR("GO!!!");
+    002B0 E202      LDI	R16,0x22
+    002B1 E011      LDI	R17,1
+    002B2 940E 022C CALL	_LCD_STR
+(0042)         delay_ms(800);
+    002B4 E200      LDI	R16,0x20
+    002B5 E013      LDI	R17,3
+    002B6 940E 038A CALL	_delay_ms
+(0043) 
+(0044)         LCD_Clear();
+    002B8 940E 024C CALL	_LCD_Clear
+(0045)         start_flag = 0;
+    002BA 2422      CLR	R2
+    002BB 2433      CLR	R3
+    002BC 9230 0103 STS	_start_flag+1,R3
+    002BE 9220 0102 STS	_start_flag,R2
+(0046)         q1_flag = 1;
+    002C0 E081      LDI	R24,1
+    002C1 E090      LDI	R25,0
+    002C2 9390 0105 STS	_q1_flag+1,R25
+    002C4 9380 0104 STS	_q1_flag,R24
+    002C6 9508      RET
+(0047)     }
+(0048) }
+    002C7 940E 0441 CALL	push_xgsetF0FC
+(0049) 
+(0050) 
+(0051) void Quiz_1(void) {     // 꽉 찬 CLCD의 문자들 중 다른 영어 문자 1개 찾기
+(0052)     Cursor_Home();
+    002C9 940E 0268 CALL	_Cursor_Home
+(0053) 
+(0054) 
+(0055)     LCD_STR("AAAAAAAAAAAAAAAA");
+    002CB E101      LDI	R16,0x11
+    002CC E011      LDI	R17,1
+    002CD 940E 022C CALL	_LCD_STR
+(0056)     LCD_pos(1,0);
+    002CF 2722      CLR	R18
+    002D0 E001      LDI	R16,1
+    002D1 940E 023C CALL	_LCD_pos
+(0057)     LCD_STR("AAAAAAAAAAAAAAAA");
+    002D3 E101      LDI	R16,0x11
+    002D4 E011      LDI	R17,1
+    002D5 940E 022C CALL	_LCD_STR
+(0058)     // A 문자로 32칸 다 채움
+(0059) 
+(0060)     Byte answer_row = rand() % 2;      // 0, 1행 중 랜덤 하나 선택
+    002D7 940E 04A0 CALL	_rand
+    002D9 E022      LDI	R18,2
+    002DA E030      LDI	R19,0
+    002DB 940E 03B8 CALL	<LIBRARY>|mod16s
+    002DD 2EA0      MOV	R10,R16
+(0061)     Byte answer_col = rand() % 16;     // 0~15열 중 랜덤 하나 선택
+    002DE 940E 04A0 CALL	_rand
+    002E0 E120      LDI	R18,0x10
+    002E1 E030      LDI	R19,0
+    002E2 940E 03B8 CALL	<LIBRARY>|mod16s
+    002E4 2EC0      MOV	R12,R16
 (0062) 
-(0063) 
-(0064) void main(void) {
-(0065)     PortInit();
-_main:
-    0024B 940E 00AD CALL	_PortInit
-(0066)     LCD_Init();
-    0024D 940E 0132 CALL	_LCD_Init
-(0067)     CGRAM_set_menu();
-    0024F DEFE      RCALL	_CGRAM_set_menu
+(0063)     LCD_pos(answer_row, answer_col);
+    002E5 2D2C      MOV	R18,R12
+    002E6 2D0A      MOV	R16,R10
+    002E7 940E 023C CALL	_LCD_pos
+(0064)     LCD_STR("B");               // 랜덤한 행,열에 B 문자 출력
+    002E9 E00F      LDI	R16,0xF
+    002EA E011      LDI	R17,1
+    002EB 940E 022C CALL	_LCD_STR
+(0065) 
+(0066)     LCD_Comm(0x0E);
+    002ED E00E      LDI	R16,0xE
+    002EE 940E 01F2 CALL	_LCD_Comm
+(0067)     Cursor_Home();
+    002F0 940E 0268 CALL	_Cursor_Home
 (0068) 
-(0069)     Cursor_Home();
-    00250 940E 014A CALL	_Cursor_Home
-(0070)     LCD_menu();
-    00252 DFEA      RCALL	_LCD_menu
-(0071)     delay_ms(10);
-    00253 E00A      LDI	R16,0xA
-    00254 E010      LDI	R17,0
-    00255 940C 0257 JMP	_delay_ms
-(0072) 
-(0073) 
-(0074) }
-_delay_ms:
-  i                    --> R20
-  j                    --> R22
-  m                    --> R16
-    00257 940E 0295 CALL	push_xgsetF000
-    00258 0295      MULS	R25,R21
+(0069)     Byte cursor_row = 0, cursor_col = 0;
+    002F2 2744      CLR	R20
+    002F3 2766      CLR	R22
+    002F4 C050      RJMP	0x0345
+(0070)     while (q1_flag == 1) {
+(0071)         Byte D = PIND & 0xF0;
+    002F5 B380      IN	R24,0x10
+    002F6 7F80      ANDI	R24,0xF0
+    002F7 2EE8      MOV	R14,R24
+(0072)         switch (D) {
+    002F8 3B80      CPI	R24,0xB0
+    002F9 F0C9      BEQ	0x0313
+    002FA EB80      LDI	R24,0xB0
+    002FB 158E      CP	R24,R14
+    002FC F020      BCS	0x0301
+    002FD 2D8E      MOV	R24,R14
+    002FE 3780      CPI	R24,0x70
+    002FF F0C1      BEQ	0x0318
+    00300 C01A      RJMP	0x031B
+    00301 2D8E      MOV	R24,R14
+    00302 3D80      CPI	R24,0xD0
+    00303 F059      BEQ	0x030F
+    00304 3D80      CPI	R24,0xD0
+    00305 F0A8      BCS	0x031B
+    00306 2D8E      MOV	R24,R14
+    00307 3E80      CPI	R24,0xE0
+    00308 F009      BEQ	0x030A
+    00309 C011      RJMP	0x031B
+(0073)             case 0b11100000: if (cursor_row > 0) cursor_row--; break;   // PD4, move cursor up
+    0030A 2422      CLR	R2
+    0030B 1624      CP	R2,R20
+    0030C F470      BCC	0x031B
+    0030D 954A      DEC	R20
+    0030E C00C      RJMP	0x031B
+(0074)             case 0b11010000: if (cursor_row < 1) cursor_row++; break;   // PD5, move cursor down
+    0030F 3041      CPI	R20,1
+    00310 F450      BCC	0x031B
+    00311 9543      INC	R20
+    00312 C008      RJMP	0x031B
+(0075)             case 0b10110000: if (cursor_col > 0) cursor_col--; break;   // PD6, move cursor left
+    00313 2422      CLR	R2
+    00314 1626      CP	R2,R22
+    00315 F428      BCC	0x031B
+    00316 956A      DEC	R22
+    00317 C003      RJMP	0x031B
+(0076)             case 0b01110000: if (cursor_col < 15) cursor_col++; break;  // PD7, move cursor right
+    00318 306F      CPI	R22,0xF
+    00319 F408      BCC	0x031B
+    0031A 9563      INC	R22
+(0077)         }
+(0078) 
+(0079)         LCD_pos(cursor_row, cursor_col);
+    0031B 2F26      MOV	R18,R22
+    0031C 2F04      MOV	R16,R20
+    0031D 940E 023C CALL	_LCD_pos
+(0080) 
+(0081)         if (cursor_row == answer_row && cursor_col == answer_col) {
+    0031F 154A      CP	R20,R10
+    00320 F501      BNE	0x0341
+    00321 156C      CP	R22,R12
+    00322 F4F1      BNE	0x0341
+(0082)             q1_flag = 0;
+    00323 2422      CLR	R2
+    00324 2433      CLR	R3
+    00325 9230 0105 STS	_q1_flag+1,R3
+    00327 9220 0104 STS	_q1_flag,R2
+(0083)             score++;
+    00329 9180 0100 LDS	R24,_score
+    0032B 9190 0101 LDS	R25,_score+1
+    0032D 9601      ADIW	R24,1
+    0032E 9390 0101 STS	_score+1,R25
+    00330 9380 0100 STS	_score,R24
+(0084)             LCD_Clear();
+    00332 940E 024C CALL	_LCD_Clear
+(0085)             Cursor_Home();
+    00334 940E 0268 CALL	_Cursor_Home
+(0086)             LCD_STR("Correct!");
+    00336 E006      LDI	R16,6
+    00337 E011      LDI	R17,1
+    00338 940E 022C CALL	_LCD_STR
+(0087)             delay_ms(1000);
+    0033A EE08      LDI	R16,0xE8
+    0033B E013      LDI	R17,3
+    0033C 940E 038A CALL	_delay_ms
+(0088)             LCD_Clear();
+    0033E 940E 024C CALL	_LCD_Clear
+(0089)             break;
+    00340 C00D      RJMP	0x034E
+(0090)         }
+(0091) 
+(0092)         delay_ms(100);
+    00341 E604      LDI	R16,0x64
+    00342 E010      LDI	R17,0
+    00343 940E 038A CALL	_delay_ms
+    00345 9180 0104 LDS	R24,_q1_flag
+    00347 9190 0105 LDS	R25,_q1_flag+1
+    00349 3081      CPI	R24,1
+    0034A E0E0      LDI	R30,0
+    0034B 079E      CPC	R25,R30
+    0034C F409      BNE	0x034E
+    0034D CFA7      RJMP	0x02F5
+(0093)     }
+(0094)     // 문제 출제 종료 (A,B) 더이상 출력하지 않게 설정
+(0095) 
+(0096) 
+(0097)     LCD_Comm(0x0E);     // LCD 커서 on
+    0034E E00E      LDI	R16,0xE
+    0034F 940E 01F2 CALL	_LCD_Comm
+(0098)     Cursor_Home();      // lCD 커서 홈으로 이동
+    00351 940E 0268 CALL	_Cursor_Home
+(0099)     // 사용자가 커서 이동, 만약 버튼 눌렀을 때 커서 위치가 row, col과 동일하다면 flag set
+(0100)     // 버튼이 눌렸을 때 q1_flag = 0이면 Quiz_1 sequence 반복, q1_flag = 1이면 score+1, quiz 2로 이동
+(0101) }
+    00353 940C 0436 JMP	pop_xgsetF0FC
+    00355 9508      RET
+(0102) 
+(0103) void main(void) {
+(0104)     DDRD = 0xFF;        // PORTD 출력 모드 (버튼)
+    00356 EF8F      LDI	R24,0xFF
+    00357 BB81      OUT	0x11,R24
+(0105)     PORTD = 0xFF;       // PORTD 내부 풀업 저항 사용하기 위해 Set
+    00358 BB82      OUT	0x12,R24
+(0106)     SFIOR |= 0x04;      // PUD bit 1로 설정
+    00359 B580      IN	R24,0x20
+    0035A 6084      ORI	R24,4
+    0035B BD80      OUT	0x20,R24
+(0107) 
+(0108)     Interrupt_init();
+    0035C DF0F      RCALL	_Interrupt_init
+(0109)     PortInit();
+    0035D 940E 01CB CALL	_PortInit
+(0110)     LCD_Init();
+    0035F 940E 0250 CALL	_LCD_Init
+(0111)     CGRAM_set_menu();
+    00361 940E 00C6 CALL	_CGRAM_set_menu
+(0112) 
+(0113)     Cursor_Home();
+    00363 940E 0268 CALL	_Cursor_Home
+(0114)     LCD_menu();
+    00365 940E 01B5 CALL	_LCD_menu
+(0115)     delay_ms(10);
+    00367 E00A      LDI	R16,0xA
+    00368 E010      LDI	R17,0
+    00369 940E 038A CALL	_delay_ms
+    0036B C01C      RJMP	0x0388
+(0116) 
+(0117)     while (1) {
+(0118)         if ((PIND & 0xFF) == 0b01111111) {  // PD7 눌러서 퀴즈 시작
+    0036C B380      IN	R24,0x10
+    0036D 7F8F      ANDI	R24,0xFF
+    0036E 378F      CPI	R24,0x7F
+    0036F F439      BNE	0x0377
+(0119)             start_flag = 1;
+    00370 E081      LDI	R24,1
+    00371 E090      LDI	R25,0
+    00372 9390 0103 STS	_start_flag+1,R25
+    00374 9380 0102 STS	_start_flag,R24
+(0120)             LCD_game_start();
+    00376 DF02      RCALL	_LCD_game_start
+(0121)         }
+(0122)         if (start_flag == 0 && q1_flag == 1)
+    00377 9020 0102 LDS	R2,_start_flag
+    00379 9030 0103 LDS	R3,_start_flag+1
+    0037B 2022      TST	R2
+    0037C F459      BNE	0x0388
+    0037D 2033      TST	R3
+    0037E F449      BNE	0x0388
+    0037F 9180 0104 LDS	R24,_q1_flag
+    00381 9190 0105 LDS	R25,_q1_flag+1
+    00383 3081      CPI	R24,1
+    00384 E0E0      LDI	R30,0
+    00385 079E      CPC	R25,R30
+    00386 F409      BNE	0x0388
+(0123)             Quiz_1();
+    00387 DF3F      RCALL	_Quiz_1
+    00388 CFE3      RJMP	0x036C
+    00389 9508      RET
+(0124)     }
+(0125) 
+(0126) }
+    0038A 940E 044C CALL	push_xgsetF000
+    0038B 044C      CPC	R4,R12
 FILE: C:\Users\user\Desktop\hidden-catch\my128.c
 (0001) #include "my128.h"
 (0002) 
@@ -591,76 +914,64 @@ FILE: C:\Users\user\Desktop\hidden-catch\my128.c
 (0004)     unsigned int i, j;
 (0005)     
 (0006)     for (i = 0; i < m; i++)
-    00259 2744      CLR	R20
-    0025A 2755      CLR	R21
-    0025B C00C      RJMP	0x0268
+    0038C 2744      CLR	R20
+    0038D 2755      CLR	R21
+    0038E C00C      RJMP	0x039B
 (0007)         for (j = 0; j < 2130; j++)
-    0025C 2766      CLR	R22
-    0025D 2777      CLR	R23
-    0025E C002      RJMP	0x0261
-    0025F 5F6F      SUBI	R22,0xFF
-    00260 4F7F      SBCI	R23,0xFF
-    00261 E582      LDI	R24,0x52
-    00262 E098      LDI	R25,0x8
-    00263 1768      CP	R22,R24
-    00264 0779      CPC	R23,R25
-    00265 F3C8      BCS	0x025F
-    00266 5F4F      SUBI	R20,0xFF
-    00267 4F5F      SBCI	R21,0xFF
-    00268 1740      CP	R20,R16
-    00269 0751      CPC	R21,R17
-    0026A F388      BCS	0x025C
-    0026B 940C 029A JMP	pop_xgsetF000
-    0026D 9508      RET
+    0038F 2766      CLR	R22
+    00390 2777      CLR	R23
+    00391 C002      RJMP	0x0394
+    00392 5F6F      SUBI	R22,0xFF
+    00393 4F7F      SBCI	R23,0xFF
+    00394 E582      LDI	R24,0x52
+    00395 E098      LDI	R25,0x8
+    00396 1768      CP	R22,R24
+    00397 0779      CPC	R23,R25
+    00398 F3C8      BCS	0x0392
+    00399 5F4F      SUBI	R20,0xFF
+    0039A 4F5F      SBCI	R21,0xFF
+    0039B 1740      CP	R20,R16
+    0039C 0751      CPC	R21,R17
+    0039D F388      BCS	0x038F
+    0039E 940C 0451 JMP	pop_xgsetF000
+    003A0 9508      RET
 (0008)             ;
 (0009) }   // delay_ms definition
 _delay_us:
   i                    --> R20
   j                    --> R22
   m                    --> R16
-    0026E 940E 0295 CALL	push_xgsetF000
+    003A1 940E 044C CALL	push_xgsetF000
 (0010) 
 (0011) void delay_us(unsigned int m) {
 (0012)     unsigned int i, j;
 (0013) 
 (0014)     for (i = 0; i < m; i++)
-    00270 2744      CLR	R20
-    00271 2755      CLR	R21
-    00272 C00C      RJMP	0x027F
+    003A3 2744      CLR	R20
+    003A4 2755      CLR	R21
+    003A5 C00C      RJMP	0x03B2
 (0015)         for (j = 0; j < 2; j++)
-    00273 2766      CLR	R22
-    00274 2777      CLR	R23
-    00275 C002      RJMP	0x0278
-    00276 5F6F      SUBI	R22,0xFF
-    00277 4F7F      SBCI	R23,0xFF
-    00278 E082      LDI	R24,2
-    00279 E090      LDI	R25,0
-    0027A 1768      CP	R22,R24
-    0027B 0779      CPC	R23,R25
-    0027C F3C8      BCS	0x0276
-    0027D 5F4F      SUBI	R20,0xFF
-    0027E 4F5F      SBCI	R21,0xFF
-    0027F 1740      CP	R20,R16
-    00280 0751      CPC	R21,R17
-    00281 F388      BCS	0x0273
-    00282 940C 029A JMP	pop_xgsetF000
-    00284 9508      RET
+    003A6 2766      CLR	R22
+    003A7 2777      CLR	R23
+    003A8 C002      RJMP	0x03AB
+    003A9 5F6F      SUBI	R22,0xFF
+    003AA 4F7F      SBCI	R23,0xFF
+    003AB E082      LDI	R24,2
+    003AC E090      LDI	R25,0
+    003AD 1768      CP	R22,R24
+    003AE 0779      CPC	R23,R25
+    003AF F3C8      BCS	0x03A9
+    003B0 5F4F      SUBI	R20,0xFF
+    003B1 4F5F      SBCI	R21,0xFF
+    003B2 1740      CP	R20,R16
+    003B3 0751      CPC	R21,R17
+    003B4 F388      BCS	0x03A6
+    003B5 940C 0451 JMP	pop_xgsetF000
+    003B7 9508      RET
 (0016)             ;
 (0017) }   // delay_us definition
-<LIBRARY>|empy16s:
-    00285 920A      ST	-Y,R0
-    00286 921A      ST	-Y,R1
-    00287 938A      ST	-Y,R24
-    00288 939A      ST	-Y,R25
-    00289 9F02      MUL	R16,R18
-    0028A 01C0      MOVW	R24,R0
-    0028B 9F12      MUL	R17,R18
-    0028C 0D90      ADD	R25,R0
-    0028D 9F03      MUL	R16,R19
-    0028E 0D90      ADD	R25,R0
-    0028F 018C      MOVW	R16,R24
-    00290 9199      LD	R25,Y+
-    00291 9189      LD	R24,Y+
-    00292 9019      LD	R1,Y+
-    00293 9009      LD	R0,Y+
-    00294 9508      RET
+<LIBRARY>|mod16s:
+    003B8 9468      BSET	6
+    003B9 92DA      ST	-Y,R13
+    003BA 2ED1      MOV	R13,R17
+    003BB C004      RJMP	0x03C0
