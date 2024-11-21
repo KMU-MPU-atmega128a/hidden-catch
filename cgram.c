@@ -57,3 +57,27 @@ void LCD_menu(void) {   // 초기 문자 "다른문자찾기" LCD에 출력
         LCD_delay(1);
     }
 }
+
+void CGRAM_set_quiz2(void) {
+    Byte q2_1[] = {0x09, 0x09, 0x09, 0x15, 0x01, 0x0E, 0x02, 0x02}; // '식'
+    Byte q2_2[] = {0x02, 0x0A, 0x0A, 0x0B, 0x16, 0x02, 0x02, 0x02}; // '사'
+    Byte q2_3[] = {0x02, 0x0A, 0x0B, 0x16, 0x17, 0x02, 0x02, 0x02}; // '샤'
+
+    LCD_Comm(0x40);     // CGRAM 주소: 0b01 000000
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q2_1[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x48);     // CGRAM 주소: 0b01 001000
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q2_2[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x50);     // CGRAM 주소: 0b01 010000
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q2_3[i]);
+        LCD_delay(1);
+    }
+}

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1732085952 source:c:\users\user\desktop\hidden-catch\lcd.c
+1732103275 source:c:\users\user\desktop\hidden-catch\lcd.c
 	"lcd.h"
 
 1732097558 c:\users\user\desktop\hidden-catch\lcd.h
@@ -8,9 +8,10 @@
 
 1727673233 c:\users\user\desktop\hidden-catch\my128.h
 
-1732098501 source:c:\users\user\desktop\hidden-catch\main.c
+1732172671 source:c:\users\user\desktop\hidden-catch\main.c
 	<iom128v.h>
 	<stdlib.h>
+	<time.h>
 	"my128.h"
 	"lcd.h"
 	"cgram.h"
@@ -18,10 +19,10 @@
 1727673357 source:c:\users\user\desktop\hidden-catch\my128.c
 	"my128.h"
 
-1732097930 source:c:\users\user\desktop\hidden-catch\cgram.c
+1732185930 source:c:\users\user\desktop\hidden-catch\cgram.c
 	"cgram.h"
 
-1732097949 c:\users\user\desktop\hidden-catch\cgram.h
+1732103330 c:\users\user\desktop\hidden-catch\cgram.h
 	<iom128v.h>
 	"my128.h"
 	"lcd.h"

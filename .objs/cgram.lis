@@ -32,6 +32,21 @@
  002A 0A0A              .byte 10,10
  002C 0A0A              .byte 10,10
  002E 0202              .byte 2,2
+ 0030           _38#A_Kh:
+ 0030 0909              .byte 9,9
+ 0032 0915              .byte 9,21
+ 0034 010E              .byte 1,14
+ 0036 0202              .byte 2,2
+ 0038           _39#A_Kh:
+ 0038 020A              .byte 2,10
+ 003A 0A0B              .byte 10,11
+ 003C 1602              .byte 22,2
+ 003E 0202              .byte 2,2
+ 0040           _40#A_Kh:
+ 0040 020A              .byte 2,10
+ 0042 0B16              .byte 11,22
+ 0044 1702              .byte 23,2
+ 0046 0202              .byte 2,2
                         .area text(rom, con, rel)
  0000                   .dbfile C:\Users\user\Desktop\hidden-catch\cgram.c
  0000                   .dbfunc e CGRAM_set_menu _CGRAM_set_menu#Fvv fV 3
@@ -378,3 +393,157 @@
  01FA                   .dbfuncend
  01FA                   .dbsym r i 20 c
  01FA                   .dbstacksize -1
+ 01FA                   .dbfunc e CGRAM_set_quiz2 _CGRAM_set_quiz2#Fvv fV 61
+ 01FA           ;              i -> R20,R21
+ 01FA           ;              i -> R20,R21
+ 01FA           ;              i -> R20,R21
+ 01FA           ;           q2_3 -> y+16
+ 01FA           ;           q2_2 -> y+8
+ 01FA           ;           q2_1 -> y+0
+                        .even
+ 01FA           _CGRAM_set_quiz2#Fvv::
+ 01FA 4A93              st -y,R20
+ 01FC 5A93              st -y,R21
+ 01FE 6897              sbiw R28,24
+ 0200                   .dbblock 61
+ 0200                   .dbline 62
+ 0200 80E0              ldi R24,<_38#A_Kh
+ 0202 90E0              ldi R25,>_38#A_Kh
+ 0204 FE01              movw R30,R28
+ 0206 08E0              ldi R16,8
+ 0208 10E0              ldi R17,0
+ 020A FA93              st -y,R31
+ 020C EA93              st -y,R30
+ 020E 9A93              st -y,R25
+ 0210 8A93              st -y,R24
+ 0212 0E940000          xcall asgncblkx
+ 0216                   .dbline 63
+ 0216 80E0              ldi R24,<_39#A_Kh
+ 0218 90E0              ldi R25,>_39#A_Kh
+ 021A FE01              movw R30,R28
+ 021C 3896              adiw R30,8
+ 021E 08E0              ldi R16,8
+ 0220 10E0              ldi R17,0
+ 0222 FA93              st -y,R31
+ 0224 EA93              st -y,R30
+ 0226 9A93              st -y,R25
+ 0228 8A93              st -y,R24
+ 022A 0E940000          xcall asgncblkx
+ 022E                   .dbline 64
+ 022E 80E0              ldi R24,<_40#A_Kh
+ 0230 90E0              ldi R25,>_40#A_Kh
+ 0232 FE01              movw R30,R28
+ 0234 7096              adiw R30,16
+ 0236 08E0              ldi R16,8
+ 0238 10E0              ldi R17,0
+ 023A FA93              st -y,R31
+ 023C EA93              st -y,R30
+ 023E 9A93              st -y,R25
+ 0240 8A93              st -y,R24
+ 0242 0E940000          xcall asgncblkx
+ 0246                   .dbline 66
+ 0246 00E4              ldi R16,64
+ 0248 0E940000          xcall _LCD_Comm#Fvh
+ 024C                   .dbline 67
+ 024C 4427              clr R20
+ 024E 5527              clr R21
+ 0250 0CC0              xjmp L44
+ 0252           L41:
+ 0252                   .dbline 68
+ 0252 CE01              movw R24,R28
+ 0254 FA01              movw R30,R20
+ 0256 E80F              add R30,R24
+ 0258 F91F              adc R31,R25
+ 025A 0081              ldd R16,z+0
+ 025C 0E940000          xcall _LCD_Data#Fvh
+ 0260                   .dbline 69
+ 0260 01E0              ldi R16,1
+ 0262 0E940000          xcall _LCD_delay#Fvh
+ 0266           L42:
+ 0266                   .dbline 67
+ 0266 4F5F              subi R20,255  ; offset = 1
+ 0268 5F4F              sbci R21,255
+ 026A           L44:
+ 026A                   .dbline 67
+ 026A 88E0              ldi R24,8
+ 026C 90E0              ldi R25,0
+ 026E 4817              cp R20,R24
+ 0270 5907              cpc R21,R25
+ 0272 7CF3              brlt L41
+ 0274           X7:
+ 0274                   .dbline 72
+ 0274 08E4              ldi R16,72
+ 0276 0E940000          xcall _LCD_Comm#Fvh
+ 027A                   .dbline 73
+ 027A 4427              clr R20
+ 027C 5527              clr R21
+ 027E 0DC0              xjmp L48
+ 0280           L45:
+ 0280                   .dbline 74
+ 0280 CE01              movw R24,R28
+ 0282 0896              adiw R24,8
+ 0284 FA01              movw R30,R20
+ 0286 E80F              add R30,R24
+ 0288 F91F              adc R31,R25
+ 028A 0081              ldd R16,z+0
+ 028C 0E940000          xcall _LCD_Data#Fvh
+ 0290                   .dbline 75
+ 0290 01E0              ldi R16,1
+ 0292 0E940000          xcall _LCD_delay#Fvh
+ 0296           L46:
+ 0296                   .dbline 73
+ 0296 4F5F              subi R20,255  ; offset = 1
+ 0298 5F4F              sbci R21,255
+ 029A           L48:
+ 029A                   .dbline 73
+ 029A 88E0              ldi R24,8
+ 029C 90E0              ldi R25,0
+ 029E 4817              cp R20,R24
+ 02A0 5907              cpc R21,R25
+ 02A2 74F3              brlt L45
+ 02A4           X8:
+ 02A4                   .dbline 78
+ 02A4 00E5              ldi R16,80
+ 02A6 0E940000          xcall _LCD_Comm#Fvh
+ 02AA                   .dbline 79
+ 02AA 4427              clr R20
+ 02AC 5527              clr R21
+ 02AE 0DC0              xjmp L52
+ 02B0           L49:
+ 02B0                   .dbline 80
+ 02B0 CE01              movw R24,R28
+ 02B2 4096              adiw R24,16
+ 02B4 FA01              movw R30,R20
+ 02B6 E80F              add R30,R24
+ 02B8 F91F              adc R31,R25
+ 02BA 0081              ldd R16,z+0
+ 02BC 0E940000          xcall _LCD_Data#Fvh
+ 02C0                   .dbline 81
+ 02C0 01E0              ldi R16,1
+ 02C2 0E940000          xcall _LCD_delay#Fvh
+ 02C6           L50:
+ 02C6                   .dbline 79
+ 02C6 4F5F              subi R20,255  ; offset = 1
+ 02C8 5F4F              sbci R21,255
+ 02CA           L52:
+ 02CA                   .dbline 79
+ 02CA 88E0              ldi R24,8
+ 02CC 90E0              ldi R25,0
+ 02CE 4817              cp R20,R24
+ 02D0 5907              cpc R21,R25
+ 02D2 74F3              brlt L49
+ 02D4           X9:
+ 02D4                   .dbblkend 83
+ 02D4           L37:
+ 02D4 6896              adiw R28,24
+ 02D6 5991              ld R21,y+
+ 02D8 4991              ld R20,y+
+ 02DA 0895              ret
+ 02DC                   .dbfuncend
+ 02DC                   .dbsym r i 20 I
+ 02DC                   .dbsym r i 20 I
+ 02DC                   .dbsym r i 20 I
+ 02DC                   .dbsym l q2_3 16 A[8:8]c
+ 02DC                   .dbsym l q2_2 8 A[8:8]c
+ 02DC                   .dbsym l q2_1 0 A[8:8]c
+ 02DC                   .dbstacksize 24
