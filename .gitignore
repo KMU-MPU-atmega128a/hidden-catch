@@ -11,7 +11,8 @@
 *.mp
 *.prj
 *.aws
-.objs/
-hidden-catch
 *.aps
 
+.objs/
+
+hidden-catch
