@@ -39,7 +39,11 @@ void Init_Timer2(void) {
 
 #pragma interrupt_handler timer2_comp_isr: iv_TIM2_COMP
 unsigned long long random_seed = 0;     // random seed (8 bytes)
+unsigned long long n = 0;
 
-void timer2_comp_isr(void) { random_seed ++; } // random_seed++ every 4ms
+void timer2_comp_isr(void) {
+    random_seed++;
+    if (random_seed > 500) n++;
+} // random_seed++ every 4ms
 
-int get_random(int max) { return random_seed % max; }
+int get_random(int max) { return n % max; }

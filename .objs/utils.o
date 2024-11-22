@@ -1,12 +1,12 @@
 XL
-H 4 areas 15 global symbols
+H 4 areas 16 global symbols
 M utils.c
 S _usart0_receive Ref0000
 S mod32u Ref0000
 S _timer2_comp_isr Ref0000
 S _usart0_transmit Ref0000
 S _delay_ms#Fvj Ref0000
-A text size 116 flags 0
+A text size 158 flags 0
 dbfile C:\Users\user\Desktop\hidden-catch\utils.c
 dbfunc e LED_correct 0 fV 3
 dbblock 3 0
@@ -48,39 +48,43 @@ dbline 24 7A
 dbline 25 80
 dbblkend 26 84
 dbfuncend 86
-dbfunc e timer2_comp_isr 86 fV 2B
-dbblock 2B 9A
-dbline 2B 9A
-dbblkend 2B CA
-dbfuncend E0
-dbfunc e get_random E0 fI 2D
+dbfunc e timer2_comp_isr 86 fV 2C
+dbblock 2C 9A
+dbline 2D 9A
+dbline 2E CA
+dbline 2E DC
+dbblkend 2F 10C
+dbfuncend 122
+dbfunc e get_random 122 fI 31
 dbsym r max A I
-dbblock 2D E6
-dbline 2D E6
-dbblkend 2D 110
-dbfuncend 116
+dbblock 31 128
+dbline 31 128
+dbblkend 31 152
+dbfuncend 158
 S _usart0_receive#Fvv Def0044
 S _Init_USART0#Fvv Def0058
-S $cb$utils.c_83 Def0030
-S $ce$utils.c_83 Def0042
-S _get_random#Fii Def00E0
+S $cb$utils.c_90 Def0030
+S $ce$utils.c_90 Def0042
+S _get_random#Fii Def0122
+S $cb$utils.c_110 Def0044
 S _timer2_comp_isr#Fvv Def0086
-S $cb$utils.c_103 Def0044
-S $ce$utils.c_103 Def0056
-S $cb$utils.c_170 Def0086
-S $ce$utils.c_170 Def00DE
+S $ce$utils.c_110 Def0056
+S $cb$utils.c_177 Def0086
+S $ce$utils.c_177 Def0120
 S _Init_Timer2#Fvv Def0072
 S _LED_correct#Fvv Def0000
 S _usart0_transmit#Fvv Def0030
-A data size 6 flags 20
+A data size A flags 20
 dbfile C:\Users\user\Desktop\hidden-catch\utils.c
 dbsym e txdata 0 c
 dbsym e rxdata 1 c
 dbsym e random_seed 2 l
+dbsym e n 6 l
+S _n#m Def0006
 S _rxdata#h Def0001
 S _random_seed#m Def0002
 S _txdata#h Def0000
-A idata size 6 flags 0
+A idata size A flags 0
 A vector size 50 flags C org 24
 T 00 00 00
 R 00 00 02 00
@@ -93,6 +97,8 @@ R 00 00 03 00 12 04 00 00
 T 24 00 0C 94 00 00
 R 00 00 03 00 12 04 02 00
 T 02 00 00 00 00 00
+R 00 00 02 00
+T 06 00 00 00 00 00
 R 00 00 02 00
 T 00 00 22 24 28 BA 0A EF 10 E0 0E 94 00 00 8F EF 88 BB 0A EF 10 E0
 R 00 00 00 00 12 0C 04 00
@@ -116,13 +122,19 @@ T 9C 00 90 E0 A0 E0 B0 E0 40 90 04 00 50 90 05 00 20 90 02 00 30 90 03 00
 R 00 00 00 00 00 0A 01 00 00 0E 01 00 00 12 01 00 00 16 01 00
 T B2 00 28 0E 39 1E 4A 1E 5B 1E 30 92 03 00 20 92 02 00 50 92 05 00 40 92
 R 00 00 00 00 00 0C 01 00 00 10 01 00 00 14 01 00
-T C8 00 04 00 29 90 2F BE B9 91 A9 91 99 91 89 91 59 90 49 90 39 90 29 90
+T C8 00 04 00 84 EF 91 E0 A0 E0 B0 E0 82 15 93 05 A4 05 B5 05 C0 F4 81 E0
 R 00 00 00 00 00 02 01 00
-T DE 00 18 95
+T DE 00 90 E0 A0 E0 B0 E0 40 90 08 00 50 90 09 00 20 90 06 00 30 90 07 00
+R 00 00 00 00 00 0A 01 00 00 0E 01 00 00 12 01 00 00 16 01 00
+T F4 00 28 0E 39 1E 4A 1E 5B 1E 30 92 07 00 20 92 06 00 50 92 09 00 40 92
+R 00 00 00 00 00 0C 01 00 00 10 01 00 00 14 01 00
+T 0A 01 08 00 29 90 2F BE B9 91 A9 91 99 91 89 91 59 90 49 90 39 90 29 90
+R 00 00 00 00 00 02 01 00
+T 20 01 18 95
 R 00 00 00 00
-T E0 00 AA 92 BA 92 58 01 15 01 44 24 37 FC 40 94 55 24 47 FC 50 94 20 91
+T 22 01 AA 92 BA 92 58 01 15 01 44 24 37 FC 40 94 55 24 47 FC 50 94 20 91
 R 00 00 00 00
-T F6 00 04 00 30 91 05 00 00 91 02 00 10 91 03 00 5A 92 4A 92 3A 92 2A 92
+T 38 01 08 00 30 91 09 00 00 91 06 00 10 91 07 00 5A 92 4A 92 3A 92 2A 92
 R 00 00 00 00 00 02 01 00 00 06 01 00 00 0A 01 00 00 0E 01 00
-T 0C 01 0E 94 00 00 B9 90 A9 90 08 95
+T 4E 01 0E 94 00 00 B9 90 A9 90 08 95
 R 00 00 00 00 12 04 01 00

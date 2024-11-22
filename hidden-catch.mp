@@ -1,14 +1,14 @@
 Project:      .\hidden-catch
-Build Number: 57
-Date:         Fri Nov 22 14:04:28 2024
+Build Number: 62
+Date:         Fri Nov 22 15:13:04 2024
 Compiler:     ICCAVR
 Version:      8.30.00
 Device:       ATMega128
 
 NOTE: AVR Code addresses are word addresses
 All other addresses (including ones in FLASH) are byte addresses
-  ROM 3% full. 2680 out of 131072 bytes used (does not include absolute areas).
-  RAM 76 bytes used (does not include stack usage).
+  ROM 3% full. 2750 out of 131072 bytes used (does not include absolute areas).
+  RAM 80 bytes used (does not include stack usage).
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -21,75 +21,75 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                           idata   011C     4C =     76. bytes (rel,con,rom,lit)
+                           idata   011C     50 =     80. bytes (rel,con,rom,lit)
 
        Addr  Global Symbol
       -----  --------------------------------
        011C  __idata_start
-       0168  __idata_end
+       016C  __idata_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0168    9E4 =   2532. bytes (rel,con,rom,code)
+                            text   016C    A26 =   2598. bytes (rel,con,rom,code)
 
        Addr  Global Symbol
       -----  --------------------------------
-       00B4  __text_start
-       00B4  __start
-       00D6  _exit
-       00D7  _CGRAM_set_menu
-       01C6  _LCD_menu
-       01D4  _CGRAM_set_quiz2
-       0245  _LCD_delay
-       024D  _PortInit
-       0253  _LCD_Data
-       0274  _LCD_Comm
-       0295  _LCD_Shift
-       02A6  _LCD_CHAR
-       02AE  _LCD_STR
-       02BE  _LCD_pos
-       02CE  _LCD_Clear
-       02D2  _LCD_Init
-       02EA  _Cursor_Home
-       02EE  _Interrupt_init
-       02FB  _LCD_game_start
-       0349  _Quiz_1
-       03E8  _Quiz_2
-       03EA  _main
-       0431  _delay_ms
-       0448  _delay_us
-       045F  _LED_correct
-       0477  _usart0_transmit
-       0481  _usart0_receive
-       048B  _Init_USART0
-       0498  _Init_Timer2
-       04A2  _timer2_comp_isr
-       04CF  _get_random
-       04EA  <LIBRARY>
-       04EA  div32u
-       04EC  mod32u
-       04F0  div32s
-       04F2  mod32s
-       051E  long_div_prolog
-       0531  long_div_epilog
-       0541  tst_R16_R19
-       0546  tst_R24_R27
-       054B  neg_R24_R27
-       0554  empy16s
-       0564  pop_xgsetF0FC
-       056F  push_xgsetF0FC
-       0571  push_xgset30FC
-       0573  push_xgset00FC
-       0575  push_xgset003C
-       057A  push_xgsetF000
-       057F  pop_xgsetF000
-       0584  neg32
-       058D  asgncblkx
-       05A6  __text_end
+       00B6  __text_start
+       00B6  __start
+       00D8  _exit
+       00D9  _CGRAM_set_menu
+       01C8  _LCD_menu
+       01D6  _CGRAM_set_quiz2
+       0247  _LCD_delay
+       024F  _PortInit
+       0255  _LCD_Data
+       0276  _LCD_Comm
+       0297  _LCD_Shift
+       02A8  _LCD_CHAR
+       02B0  _LCD_STR
+       02C0  _LCD_pos
+       02D0  _LCD_Clear
+       02D4  _LCD_Init
+       02EC  _Cursor_Home
+       02F0  _Interrupt_init
+       02FD  _LCD_game_start
+       034B  _Quiz_1
+       03EA  _Quiz_2
+       03EC  _main
+       0433  _delay_ms
+       044A  _delay_us
+       0461  _LED_correct
+       0479  _usart0_transmit
+       0483  _usart0_receive
+       048D  _Init_USART0
+       049A  _Init_Timer2
+       04A4  _timer2_comp_isr
+       04F2  _get_random
+       050D  <LIBRARY>
+       050D  div32u
+       050F  mod32u
+       0513  div32s
+       0515  mod32s
+       0541  long_div_prolog
+       0554  long_div_epilog
+       0564  tst_R16_R19
+       0569  tst_R24_R27
+       056E  neg_R24_R27
+       0577  empy16s
+       0587  pop_xgsetF0FC
+       0592  push_xgsetF0FC
+       0594  push_xgset30FC
+       0596  push_xgset00FC
+       0598  push_xgset003C
+       059D  push_xgsetF000
+       05A2  pop_xgsetF000
+       05A7  neg32
+       05B0  asgncblkx
+       05C9  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            data   0100     4C =     76. bytes (rel,con,ram)
+                            data   0100     50 =     80. bytes (rel,con,ram)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -101,7 +101,8 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        0146  _txdata
        0147  _rxdata
        0148  _random_seed
-       014C  __data_end
+       014C  _n
+       0150  __data_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
