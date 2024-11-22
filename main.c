@@ -1,9 +1,8 @@
 #include <iom128v.h>
-#include <stdlib.h>
-#include <time.h>
 #include "my128.h"
 #include "lcd.h"
 #include "cgram.h"
+#include "utils.h"
 
 unsigned int score = 0; // 점수 저장
 
@@ -12,29 +11,8 @@ int start_flag = 0;
 int q1_flag = 0;
 int q2_flag = 0;
 
-/* time.h 사용 못할 경우 대비, 타이머 생성했으나 사용할지는 미지수
-#pragma interrupt_handler timer2_comp_isr: iv_TIM2_COMP
-unsigned int n = 0;
+// 버튼 0~3으로 커서 이동 인터럽트 작성
 
-void timer2_comp_isr(void) {
-    n++;
-    OCR2 = 249;
-    if (n > 60000) n = 0;
-}
-
-void Init_Timer2(void) {
-    TCCR2 = ((1 << WGM21) | (1 << CS22));
-    OCR2 = 249;
-    TIMSK |= (1 << OCIE2);
-}*/
-
-void LED_correct(void) {  // 정답 시 LED 전체 점등 함수
-    PORTB = 0x00; delay_ms(250);
-    PORTB = 0xFF; delay_ms(250);
-    PORTB = 0x00; delay_ms(250);
-    PORTB = 0xFF; delay_ms(250);
-}
-/*
 void Interrupt_init(void) {
     EIMSK |= 1 << INT0;          // INT0 버튼 인터럽트 허용
     EICRA |= 1 << ISC01 | 1 << ISC11 | 1 << ISC21 | 1 << ISC31;
@@ -43,7 +21,7 @@ void Interrupt_init(void) {
     // INT4~INT7 falling edge trigger 설정
     SREG |= 0x80;           // 전역 인터럽트 허가
 }
-*/
+
 void LCD_game_start(void) {
     if (start_flag) {
         Cursor_Home();
@@ -78,15 +56,14 @@ void Quiz_1(void) {     // 꽉 찬 CLCD의 문자들 중 다른 영어 문자 1개 찾기
     LCD_pos(1,0);
     LCD_STR("AAAAAAAAAAAAAAAA");
     // A 문자로 32칸 다 채움
-    // srand((unsigned int)time(NULL));
 
-    Byte answer_row = rand() % 2;      // 0, 1행 중 랜덤 하나 선택
-    Byte answer_col = rand() % 16;     // 0~15열 중 랜덤 하나 선택
+    Byte answer_row = get_random(2);    // 0, 1행 중 랜덤 하나 선택
+    Byte answer_col = get_random(16);   // 0~15열 중 랜덤 하나 선택
 
     LCD_pos(answer_row, answer_col);
     LCD_STR("B");               // 랜덤한 행,열에 B 문자 출력
 
-    LCD_Comm(0x0E);
+    LCD_Comm(0x0E);             // lCD 커서 on (1번 문제 진행에 필요)
     Cursor_Home();
 
     Byte cursor_row = 0, cursor_col = 0;
@@ -120,12 +97,13 @@ void Quiz_1(void) {     // 꽉 찬 CLCD의 문자들 중 다른 영어 문자 1개 찾기
     }
     // 문제 출제 종료 (A,B) 더이상 출력하지 않게 설정
 
-
-    LCD_Comm(0x0E);     // LCD 커서 on
+    LCD_Comm(0x0C);     // LCD 커서 off
     Cursor_Home();      // lCD 커서 홈으로 이동
 }
 
-void quiz_2(void) {
+void Quiz_2(void) {
+    // CGROM- '식': 0x00, '사': 0x01, '샤': 0x02
+
     Cursor_Home();
 }
 
@@ -140,14 +118,15 @@ void main(void) {
     Interrupt_init();
     PortInit();
     LCD_Init();
-    CGRAM_set_menu();
 
+    CGRAM_set_menu();
     Cursor_Home();
     LCD_menu();
     delay_ms(10);
 
     while (1) {
         if ((PIND & 0xFF) == 0b01111111) {  // PD7 눌러서 퀴즈 시작
+            // 테스트할 때에는 rxdata == 'A'로 변경
             start_flag = 1;
             LCD_game_start();
         }

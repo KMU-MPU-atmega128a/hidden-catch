@@ -8,22 +8,34 @@
 
 1727673233 c:\users\user\desktop\hidden-catch\my128.h
 
-1732172671 source:c:\users\user\desktop\hidden-catch\main.c
+1732251101 source:c:\users\user\desktop\hidden-catch\main.c
 	<iom128v.h>
-	<stdlib.h>
-	<time.h>
 	"my128.h"
 	"lcd.h"
 	"cgram.h"
+	"utils.h"
 
 1727673357 source:c:\users\user\desktop\hidden-catch\my128.c
 	"my128.h"
 
-1732185930 source:c:\users\user\desktop\hidden-catch\cgram.c
+1732250330 source:c:\users\user\desktop\hidden-catch\cgram.c
 	"cgram.h"
 
-1732103330 c:\users\user\desktop\hidden-catch\cgram.h
+1732250334 c:\users\user\desktop\hidden-catch\cgram.h
 	<iom128v.h>
 	"my128.h"
 	"lcd.h"
+
+1732249456 c:\users\user\desktop\hidden-catch\usart.h
+	<iom128v.h>
+	"my128.h"
+	"lcd.h"
+
+1732251866 c:\users\user\desktop\hidden-catch\utils.h
+	<iom128v.h>
+	"my128.h"
+	"lcd.h"
+
+1732250653 source:c:\users\user\desktop\hidden-catch\utils.c
+	"utils.h"
 

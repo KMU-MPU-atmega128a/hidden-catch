@@ -81,3 +81,35 @@ void CGRAM_set_quiz2(void) {
         LCD_delay(1);
     }
 }
+/* 3번 CGRAM data (생각중...)
+void CGRAM_set_quiz3(void) {
+    Byte q3_1[] = {}
+    Byte q3_2[];
+    Byte q3_3[];
+    Byte q3_4[];
+
+    LCD_Comm(0x40);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_1[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x48);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_2[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x50);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_3[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x58);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_4[i]);
+        LCD_delay(1);
+    }
+
+}*/

@@ -28,7 +28,7 @@
 					<Add option="-MHasMul" />
 					<Add option="-MEnhanced" />
 					<Add option="-Wf-use_elpm" />
-					<Add option="-D__BUILD=47" />
+					<Add option="-D__BUILD=58" />
 				</Compiler>
 				<Linker>
 					<Add option="-mATMega128" />
@@ -42,7 +42,7 @@
 					<Add option="-beeprom:0.4096" />
 					<Add option="-fihx_coff" />
 					<Add option="-S2" />
-					<Add option="-nb:47" />
+					<Add option="-nb:58" />
 					<Add library="catm128" />
 				</Linker>
 			</Target>
@@ -58,7 +58,7 @@
 			<Add option="-MHasMul" />
 			<Add option="-MEnhanced" />
 			<Add option="-Wf-use_elpm" />
-			<Add option="-D__BUILD=47" />
+			<Add option="-D__BUILD=58" />
 		</Compiler>
 		<Linker>
 			<Add option="-mATMega128" />
@@ -72,7 +72,7 @@
 			<Add option="-beeprom:0.4096" />
 			<Add option="-fihx_coff" />
 			<Add option="-S2" />
-			<Add option="-nb:47" />
+			<Add option="-nb:58" />
 			<Add library="catm128" />
 		</Linker>
 		<Unit filename="cgram.c">
@@ -90,6 +90,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="my128.h" />
+		<Unit filename="utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
