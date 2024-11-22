@@ -12,3 +12,6 @@
 *.prj
 *.aws
 .objs/
+hidden-catch
+*.aps
+
