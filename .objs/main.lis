@@ -1,0 +1,519 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0000           _score#j::
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 0000              .word 0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0002                   .dbsym e score _score#j i
+ 0002           _start_flag#i::
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 0000              .word 0
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0004                   .dbsym e start_flag _start_flag#i I
+ 0004           _q1_flag#i::
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 0000              .word 0
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0006                   .dbsym e q1_flag _q1_flag#i I
+ 0006           _q2_flag#i::
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 0000              .word 0
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0008                   .dbsym e q2_flag _q2_flag#i I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0000                   .dbfunc e Interrupt_init _Interrupt_init#Fvv fV 18
+                        .even
+ 0000           _Interrupt_init#Fvv::
+ 0000                   .dbblock 18
+ 0000                   .dbline 19
+ 0000 89B7              in R24,0x39
+ 0002 8160              ori R24,1
+ 0004 89BF              out 0x39,R24
+ 0006                   .dbline 20
+ 0006 80916A00          lds R24,106
+ 000A 8A6A              ori R24,170
+ 000C 80936A00          sts 106,R24
+ 0010                   .dbline 22
+ 0010 8AB7              in R24,0x3a
+ 0012 8A6A              ori R24,170
+ 0014 8ABF              out 0x3a,R24
+ 0016                   .dbline 24
+ 0016 7894              bset 7
+ 0018                   .dbblkend 25
+ 0018           L1:
+ 0018 0895              ret
+ 001A                   .dbfuncend
+ 001A                   .dbstacksize -2
+ 001A                   .dbfunc e LCD_game_start _LCD_game_start#Fvv fV 27
+                        .even
+ 001A           _LCD_game_start#Fvv::
+ 001A                   .dbblock 27
+ 001A                   .dbline 28
+ 001A 20900200          lds R2,_start_flag#i
+ 001E 30900300          lds R3,_start_flag#i+1
+ 0022 2220              tst R2
+ 0024 19F4              brne X0
+ 0026 3320              tst R3
+ 0028 09F4              brne X1
+ 002A 44C0              xjmp L3
+ 002C           X1:
+ 002C           X0:
+ 002C                   .dbline 29
+ 002C 0E940000          xcall _Cursor_Home#Fvv
+ 0030                   .dbline 30
+ 0030 00E0              ldi R16,<_5#A15_c
+ 0032 10E0              ldi R17,>_5#A15_c
+ 0034 0E940000          xcall _LCD_STR#FvPh
+ 0038                   .dbline 31
+ 0038 2FE0              ldi R18,15
+ 003A 0027              clr R16
+ 003C 0E940000          xcall _LCD_pos#Fvhh
+ 0040                   .dbline 32
+ 0040 00E0              ldi R16,<_6#A2_c
+ 0042 10E0              ldi R17,>_6#A2_c
+ 0044 0E940000          xcall _LCD_STR#FvPh
+ 0048                   .dbline 33
+ 0048 08EE              ldi R16,1000
+ 004A 13E0              ldi R17,3
+ 004C 0E940000          xcall _delay_ms#Fvj
+ 0050                   .dbline 35
+ 0050 2FE0              ldi R18,15
+ 0052 0027              clr R16
+ 0054 0E940000          xcall _LCD_pos#Fvhh
+ 0058                   .dbline 36
+ 0058 00E0              ldi R16,<_7#A2_c
+ 005A 10E0              ldi R17,>_7#A2_c
+ 005C 0E940000          xcall _LCD_STR#FvPh
+ 0060                   .dbline 37
+ 0060 08EE              ldi R16,1000
+ 0062 13E0              ldi R17,3
+ 0064 0E940000          xcall _delay_ms#Fvj
+ 0068                   .dbline 39
+ 0068 2FE0              ldi R18,15
+ 006A 0027              clr R16
+ 006C 0E940000          xcall _LCD_pos#Fvhh
+ 0070                   .dbline 40
+ 0070 00E0              ldi R16,<_8#A2_c
+ 0072 10E0              ldi R17,>_8#A2_c
+ 0074 0E940000          xcall _LCD_STR#FvPh
+ 0078                   .dbline 41
+ 0078 08EE              ldi R16,1000
+ 007A 13E0              ldi R17,3
+ 007C 0E940000          xcall _delay_ms#Fvj
+ 0080                   .dbline 43
+ 0080 0E940000          xcall _LCD_Clear#Fvv
+ 0084                   .dbline 44
+ 0084 0E940000          xcall _Cursor_Home#Fvv
+ 0088                   .dbline 45
+ 0088 00E0              ldi R16,<_9#A6_c
+ 008A 10E0              ldi R17,>_9#A6_c
+ 008C 0E940000          xcall _LCD_STR#FvPh
+ 0090                   .dbline 46
+ 0090 00E2              ldi R16,800
+ 0092 13E0              ldi R17,3
+ 0094 0E940000          xcall _delay_ms#Fvj
+ 0098                   .dbline 48
+ 0098 0E940000          xcall _LCD_Clear#Fvv
+ 009C                   .dbline 49
+ 009C 2224              clr R2
+ 009E 3324              clr R3
+ 00A0 30920300          sts _start_flag#i+1,R3
+ 00A4 20920200          sts _start_flag#i,R2
+ 00A8                   .dbline 50
+ 00A8 81E0              ldi R24,1
+ 00AA 90E0              ldi R25,0
+ 00AC 90930500          sts _q1_flag#i+1,R25
+ 00B0 80930400          sts _q1_flag#i,R24
+ 00B4           L3:
+ 00B4                   .dbblkend 52
+ 00B4           L2:
+ 00B4 0895              ret
+ 00B6                   .dbfuncend
+ 00B6                   .dbstacksize -2
+ 00B6                   .dbfunc e Quiz_1 _Quiz_1#Fvv fV 54
+ 00B6           ;              D -> R14
+ 00B6           ;     cursor_col -> R22
+ 00B6           ;     cursor_row -> R20
+ 00B6           ;     answer_col -> R12
+ 00B6           ;     answer_row -> y+0
+                        .even
+ 00B6           _Quiz_1#Fvv::
+ 00B6 0E940000          xcall push_xgsetF0FC
+ 00BA 2197              sbiw R28,1
+ 00BC                   .dbblock 54
+ 00BC                   .dbline 55
+ 00BC 0E940000          xcall _Cursor_Home#Fvv
+ 00C0                   .dbblock 62
+ 00C0                   .dbline 62
+ 00C0 02E0              ldi R16,2
+ 00C2 0E940000          xcall _get_random#Fhh
+ 00C6 0883              std y+0,R16
+ 00C8                   .dbline 63
+ 00C8 00E1              ldi R16,16
+ 00CA 0E940000          xcall _get_random#Fhh
+ 00CE C02E              mov R12,R16
+ 00D0                   .dbline 65
+ 00D0 2227              clr R18
+ 00D2 01E0              ldi R16,1
+ 00D4 0E940000          xcall _LCD_pos#Fvhh
+ 00D8                   .dbline 66
+ 00D8 0881              ldd R16,y+0
+ 00DA 005D              subi R16,208    ; addi 48
+ 00DC 0E940000          xcall _LCD_CHAR#Fvh
+ 00E0                   .dbline 67
+ 00E0 0C2D              mov R16,R12
+ 00E2 005D              subi R16,208    ; addi 48
+ 00E4 0E940000          xcall _LCD_CHAR#Fvh
+ 00E8                   .dbline 69
+ 00E8 2C2D              mov R18,R12
+ 00EA 0881              ldd R16,y+0
+ 00EC 0E940000          xcall _LCD_pos#Fvhh
+ 00F0                   .dbline 70
+ 00F0 00E0              ldi R16,<_11#A2_c
+ 00F2 10E0              ldi R17,>_11#A2_c
+ 00F4 0E940000          xcall _LCD_STR#FvPh
+ 00F8                   .dbline 72
+ 00F8 0EE0              ldi R16,14
+ 00FA 0E940000          xcall _LCD_Comm#Fvh
+ 00FE                   .dbline 73
+ 00FE 0E940000          xcall _Cursor_Home#Fvv
+ 0102                   .dbblock 75
+ 0102                   .dbline 75
+ 0102 4427              clr R20
+ 0104                   .dbline 75
+ 0104 6627              clr R22
+ 0106 62C0              xjmp L13
+ 0108           L12:
+ 0108                   .dbline 77
+ 0108 80B3              in R24,0x10
+ 010A 8F7F              andi R24,255
+ 010C E82E              mov R14,R24
+ 010E                   .dbline 78
+ 010E A82E              mov R10,R24
+ 0110 8F3B              cpi R24,191
+ 0112 C9F0              breq L24
+ 0114           X2:
+ 0114 8FEB              ldi R24,191
+ 0116 8E15              cp R24,R14
+ 0118 20F0              brlo L31
+ 011A           X3:
+ 011A           L30:
+ 011A 8A2D              mov R24,R10
+ 011C 8F37              cpi R24,127
+ 011E C1F0              breq L27
+ 0120           X4:
+ 0120 1AC0              xjmp L15
+ 0122           L31:
+ 0122 8A2D              mov R24,R10
+ 0124 8F3D              cpi R24,223
+ 0126 59F0              breq L21
+ 0128           X5:
+ 0128 8F3D              cpi R24,223
+ 012A A8F0              brlo L15
+ 012C           X6:
+ 012C           L32:
+ 012C 8A2D              mov R24,R10
+ 012E 8F3E              cpi R24,239
+ 0130 09F0              breq L18
+ 0132           X7:
+ 0132 11C0              xjmp L15
+ 0134           L18:
+ 0134                   .dbline 79
+ 0134 2224              clr R2
+ 0136 2416              cp R2,R20
+ 0138 70F4              brsh L16
+ 013A           X8:
+ 013A                   .dbline 79
+ 013A 4A95              dec R20
+ 013C                   .dbline 79
+ 013C 0CC0              xjmp L16
+ 013E           L21:
+ 013E                   .dbline 80
+ 013E 4130              cpi R20,1
+ 0140 50F4              brsh L16
+ 0142           X9:
+ 0142                   .dbline 80
+ 0142 4395              inc R20
+ 0144                   .dbline 80
+ 0144 08C0              xjmp L16
+ 0146           L24:
+ 0146                   .dbline 81
+ 0146 2224              clr R2
+ 0148 2616              cp R2,R22
+ 014A 28F4              brsh L16
+ 014C           X10:
+ 014C                   .dbline 81
+ 014C 6A95              dec R22
+ 014E                   .dbline 81
+ 014E 03C0              xjmp L16
+ 0150           L27:
+ 0150                   .dbline 82
+ 0150 6F30              cpi R22,15
+ 0152 08F4              brsh L16
+ 0154           X11:
+ 0154                   .dbline 82
+ 0154 6395              inc R22
+ 0156           L15:
+ 0156           L16:
+ 0156                   .dbline 85
+ 0156 262F              mov R18,R22
+ 0158 042F              mov R16,R20
+ 015A 0E940000          xcall _LCD_pos#Fvhh
+ 015E                   .dbline 87
+ 015E 8E2D              mov R24,R14
+ 0160 8D3F              cpi R24,253
+ 0162 81F5              brne L33
+ 0164           X12:
+ 0164                   .dbline 88
+ 0164 0880              ldd R0,y+0
+ 0166 4015              cp R20,R0
+ 0168 F1F4              brne L35
+ 016A           X13:
+ 016A 6C15              cp R22,R12
+ 016C E1F4              brne L35
+ 016E           X14:
+ 016E                   .dbline 90
+ 016E 2224              clr R2
+ 0170 3324              clr R3
+ 0172 30920500          sts _q1_flag#i+1,R3
+ 0176 20920400          sts _q1_flag#i,R2
+ 017A                   .dbline 90
+ 017A 80910000          lds R24,_score#j
+ 017E 90910100          lds R25,_score#j+1
+ 0182 0196              adiw R24,1
+ 0184 90930100          sts _score#j+1,R25
+ 0188 80930000          sts _score#j,R24
+ 018C                   .dbline 91
+ 018C 0E940000          xcall _LCD_Clear#Fvv
+ 0190                   .dbline 91
+ 0190 0E940000          xcall _Cursor_Home#Fvv
+ 0194                   .dbline 91
+ 0194 00E0              ldi R16,<_37#A9_c
+ 0196 10E0              ldi R17,>_37#A9_c
+ 0198 0E940000          xcall _LCD_STR#FvPh
+ 019C                   .dbline 92
+ 019C 0E940000          xcall _LED_correct#Fvv
+ 01A0                   .dbline 92
+ 01A0 0E940000          xcall _LCD_Clear#Fvv
+ 01A4                   .dbline 93
+ 01A4 1CC0              xjmp L14
+ 01A6           L35:
+ 01A6                   .dbline 97
+ 01A6 0E940000          xcall _LCD_Clear#Fvv
+ 01AA                   .dbline 97
+ 01AA 0E940000          xcall _Cursor_Home#Fvv
+ 01AE                   .dbline 97
+ 01AE 00E0              ldi R16,<_38#A7_c
+ 01B0 10E0              ldi R17,>_38#A7_c
+ 01B2 0E940000          xcall _LCD_STR#FvPh
+ 01B6                   .dbline 98
+ 01B6 08EE              ldi R16,1000
+ 01B8 13E0              ldi R17,3
+ 01BA 0E940000          xcall _delay_ms#Fvj
+ 01BE                   .dbline 98
+ 01BE 0E940000          xcall _LCD_Clear#Fvv
+ 01C2                   .dbline 98
+ 01C2 79DF              xcall _Quiz_1#Fvv
+ 01C4           L33:
+ 01C4                   .dbline 102
+ 01C4 04E6              ldi R16,100
+ 01C6 10E0              ldi R17,0
+ 01C8 0E940000          xcall _delay_ms#Fvj
+ 01CC           L13:
+ 01CC                   .dbline 76
+ 01CC 80910400          lds R24,_q1_flag#i
+ 01D0 90910500          lds R25,_q1_flag#i+1
+ 01D4 8130              cpi R24,1
+ 01D6 E0E0              ldi R30,0
+ 01D8 9E07              cpc R25,R30
+ 01DA 09F4              brne X16
+ 01DC 95CF              xjmp L12
+ 01DE           X16:
+ 01DE           X15:
+ 01DE           L14:
+ 01DE                   .dbline 106
+ 01DE 0CE0              ldi R16,12
+ 01E0 0E940000          xcall _LCD_Comm#Fvh
+ 01E4                   .dbline 107
+ 01E4 0E940000          xcall _Cursor_Home#Fvv
+ 01E8                   .dbblkend 108
+ 01E8                   .dbblkend 108
+ 01E8                   .dbblkend 108
+ 01E8           L10:
+ 01E8 2196              adiw R28,1
+ 01EA 0C940000          xjmp pop_xgsetF0FC
+ 01EE 0895              ret
+ 01F0                   .dbfuncend
+ 01F0                   .dbsym r D 14 c
+ 01F0                   .dbsym r cursor_col 22 c
+ 01F0                   .dbsym r cursor_row 20 c
+ 01F0                   .dbsym r answer_col 12 c
+ 01F0                   .dbsym l answer_row 0 c
+ 01F0                   .dbstacksize 9
+ 01F0                   .dbfunc e Quiz_2 _Quiz_2#Fvv fV 110
+                        .even
+ 01F0           _Quiz_2#Fvv::
+ 01F0                   .dbblock 110
+ 01F0                   .dbblkend 115
+ 01F0           L39:
+ 01F0 0C940000          xjmp _Cursor_Home#Fvv
+ 01F4                   .dbfuncend
+ 01F4                   .dbstacksize -2
+ 01F4                   .dbfunc e main _main#Fvv fV 117
+                        .even
+ 01F4           _main#Fvv::
+ 01F4                   .dbblock 117
+ 01F4                   .dbline 118
+ 01F4 8FEF              ldi R24,255
+ 01F6 87BB              out 0x17,R24
+ 01F8                   .dbline 119
+ 01F8 88BB              out 0x18,R24
+ 01FA                   .dbline 121
+ 01FA 81BB              out 0x11,R24
+ 01FC                   .dbline 122
+ 01FC 82BB              out 0x12,R24
+ 01FE                   .dbline 123
+ 01FE 80B5              in R24,0x20
+ 0200 8460              ori R24,4
+ 0202 80BD              out 0x20,R24
+ 0204                   .dbline 125
+ 0204 FDDE              xcall _Interrupt_init#Fvv
+ 0206                   .dbline 126
+ 0206 0E940000          xcall _PortInit#Fvv
+ 020A                   .dbline 127
+ 020A 0E940000          xcall _LCD_Init#Fvv
+ 020E                   .dbline 129
+ 020E 0E940000          xcall _CGRAM_set_menu#Fvv
+ 0212                   .dbline 130
+ 0212 0E940000          xcall _Cursor_Home#Fvv
+ 0216                   .dbline 131
+ 0216 0E940000          xcall _LCD_menu#Fvv
+ 021A                   .dbline 132
+ 021A 0AE0              ldi R16,10
+ 021C 10E0              ldi R17,0
+ 021E 0E940000          xcall _delay_ms#Fvj
+ 0222 2FC0              xjmp L42
+ 0224           L41:
+ 0224                   .dbline 135
+ 0224 0E940000          xcall _second_counter#Fvv
+ 0228                   .dbline 136
+ 0228 80B3              in R24,0x10
+ 022A 8F7F              andi R24,255
+ 022C 8F37              cpi R24,127
+ 022E 39F4              brne L44
+ 0230           X17:
+ 0230                   .dbline 138
+ 0230 81E0              ldi R24,1
+ 0232 90E0              ldi R25,0
+ 0234 90930300          sts _start_flag#i+1,R25
+ 0238 80930200          sts _start_flag#i,R24
+ 023C                   .dbline 139
+ 023C EEDE              xcall _LCD_game_start#Fvv
+ 023E           L44:
+ 023E                   .dbline 141
+ 023E 20900200          lds R2,_start_flag#i
+ 0242 30900300          lds R3,_start_flag#i+1
+ 0246 2220              tst R2
+ 0248 59F4              brne L46
+ 024A 3320              tst R3
+ 024C 49F4              brne L46
+ 024E           X18:
+ 024E 80910400          lds R24,_q1_flag#i
+ 0252 90910500          lds R25,_q1_flag#i+1
+ 0256 8130              cpi R24,1
+ 0258 E0E0              ldi R30,0
+ 025A 9E07              cpc R25,R30
+ 025C 09F4              brne L46
+ 025E           X19:
+ 025E                   .dbline 142
+ 025E 2BDF              xcall _Quiz_1#Fvv
+ 0260           L46:
+ 0260                   .dbline 143
+ 0260 20900200          lds R2,_start_flag#i
+ 0264 30900300          lds R3,_start_flag#i+1
+ 0268 2220              tst R2
+ 026A 59F4              brne L48
+ 026C 3320              tst R3
+ 026E 49F4              brne L48
+ 0270           X20:
+ 0270 80910600          lds R24,_q2_flag#i
+ 0274 90910700          lds R25,_q2_flag#i+1
+ 0278 8130              cpi R24,1
+ 027A E0E0              ldi R30,0
+ 027C 9E07              cpc R25,R30
+ 027E 09F4              brne L48
+ 0280           X21:
+ 0280                   .dbline 144
+ 0280 B7DF              xcall _Quiz_2#Fvv
+ 0282           L48:
+ 0282           L42:
+ 0282                   .dbline 134
+ 0282 D0CF              xjmp L41
+ 0284           X22:
+ 0284                   .dbblkend 147
+ 0284           L40:
+ 0284 0895              ret
+ 0286                   .dbfuncend
+ 0286                   .dbstacksize -2
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0008           _38#A7_c:
+ 0008                   .blkb 7
+                        .area idata(rom)
+ 0008 57726F6E672100    .byte 'W,'r,'o,'n,'g,33,0
+                        .area data(ram, con, rel)
+ 000F                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 000F           _37#A9_c:
+ 000F                   .blkb 9
+                        .area idata(rom)
+ 000F 436F72726563742100        .byte 'C,'o,'r,'r,'e,'c,'t,33,0
+                        .area data(ram, con, rel)
+ 0018                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0018           _11#A2_c:
+ 0018                   .blkb 2
+                        .area idata(rom)
+ 0018 4200              .byte 'B,0
+                        .area data(ram, con, rel)
+ 001A                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 001A           _9#A6_c:
+ 001A                   .blkb 6
+                        .area idata(rom)
+ 001A 474F21212100      .byte 'G,'O,33,33,33,0
+                        .area data(ram, con, rel)
+ 0020                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0020           _8#A2_c:
+ 0020                   .blkb 2
+                        .area idata(rom)
+ 0020 3100              .byte 49,0
+                        .area data(ram, con, rel)
+ 0022                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0022           _7#A2_c:
+ 0022                   .blkb 2
+                        .area idata(rom)
+ 0022 3200              .byte 50,0
+                        .area data(ram, con, rel)
+ 0024                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0024           _6#A2_c:
+ 0024                   .blkb 2
+                        .area idata(rom)
+ 0024 3300              .byte 51,0
+                        .area data(ram, con, rel)
+ 0026                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
+ 0026           _5#A15_c:
+ 0026                   .blkb 15
+                        .area idata(rom)
+ 0026 5374617274696E6720696E2E2E2E00    .byte 'S,'t,'a,'r,'t,'i,'n,'g,32,'i,'n,46,46,46,0
+                        .area data(ram, con, rel)
+ 0035                   .dbfile C:\Users\user\Desktop\hidden-catch\main.c
