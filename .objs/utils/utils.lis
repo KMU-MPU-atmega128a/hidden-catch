@@ -1,3 +1,0 @@
-                        .module utils.c
-                        .area text(rom, con, rel)
- 0000                   .dbfile C:\Users\user\Desktop\hidden-catch\utils\utils.c
