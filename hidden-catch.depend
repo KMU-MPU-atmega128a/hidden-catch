@@ -1,18 +1,52 @@
 # depslib dependency file v1.0
-1732076942 source:c:\users\user\desktop\hidden-catch\lcd.c
-	"lcd.h"
-
-1727689078 c:\users\user\desktop\hidden-catch\lcd.h
-	<iom128v.h>
-	"my128.h"
-
-1727673233 c:\users\user\desktop\hidden-catch\my128.h
-
-1732080413 source:c:\users\user\desktop\hidden-catch\main.c
+1732424219 source:c:\users\user\desktop\hidden-catch\main.c
 	<iom128v.h>
 	"my128.h"
 	"lcd.h"
+	"cgram.h"
+	"usart.h"
+	"timer.h"
+	"led.h"
 
-1727673357 source:c:\users\user\desktop\hidden-catch\my128.c
+1732424219 c:\users\user\desktop\hidden-catch\utils\my128.h
+
+1732424219 c:\users\user\desktop\hidden-catch\utils\lcd.h
+	<iom128v.h>
 	"my128.h"
+
+1732424219 c:\users\user\desktop\hidden-catch\utils\cgram.h
+	<iom128v.h>
+	"my128.h"
+	"lcd.h"
+
+1732424219 c:\users\user\desktop\hidden-catch\utils\usart.h
+	<iom128v.h>
+	"my128.h"
+
+1732424219 c:\users\user\desktop\hidden-catch\utils\timer.h
+	<iom128v.h>
+	"my128.h"
+	"lcd.h"
+
+1732424219 c:\users\user\desktop\hidden-catch\utils\led.h
+	<iom128v.h>
+	"my128.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\cgram.c
+	"cgram.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\lcd.c
+	"lcd.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\led.c
+	"led.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\my128.c
+	"my128.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\timer.c
+	"timer.h"
+
+1732424219 source:c:\users\user\desktop\hidden-catch\utils\usart.c
+	"usart.h"
 

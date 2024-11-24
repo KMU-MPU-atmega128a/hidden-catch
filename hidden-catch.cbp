@@ -28,7 +28,8 @@
 					<Add option="-MHasMul" />
 					<Add option="-MEnhanced" />
 					<Add option="-Wf-use_elpm" />
-					<Add option="-D__BUILD=1" />
+					<Add option="-D__BUILD=3" />
+					<Add directory="utils" />
 				</Compiler>
 				<Linker>
 					<Add option="-mATMega128" />
@@ -42,7 +43,7 @@
 					<Add option="-beeprom:0.4096" />
 					<Add option="-fihx_coff" />
 					<Add option="-S2" />
-					<Add option="-nb:1" />
+					<Add option="-nb:3" />
 					<Add library="catm128" />
 				</Linker>
 			</Target>
@@ -58,7 +59,7 @@
 			<Add option="-MHasMul" />
 			<Add option="-MEnhanced" />
 			<Add option="-Wf-use_elpm" />
-			<Add option="-D__BUILD=1" />
+			<Add option="-D__BUILD=3" />
 		</Compiler>
 		<Linker>
 			<Add option="-mATMega128" />
@@ -72,20 +73,36 @@
 			<Add option="-beeprom:0.4096" />
 			<Add option="-fihx_coff" />
 			<Add option="-S2" />
-			<Add option="-nb:1" />
+			<Add option="-nb:3" />
 			<Add library="catm128" />
 		</Linker>
-		<Unit filename="lcd.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="lcd.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="my128.c">
+		<Unit filename="utils/cgram.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="my128.h" />
+		<Unit filename="utils/cgram.h" />
+		<Unit filename="utils/lcd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/lcd.h" />
+		<Unit filename="utils/led.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/led.h" />
+		<Unit filename="utils/my128.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/my128.h" />
+		<Unit filename="utils/timer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/timer.h" />
+		<Unit filename="utils/usart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils/usart.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
