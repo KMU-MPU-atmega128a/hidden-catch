@@ -2,7 +2,9 @@
 #include "my128.h"
 #include "lcd.h"
 #include "cgram.h"
-#include "utils.h"
+#include "usart.h"
+#include "timer.h"
+#include "led.h"
 
 unsigned int score = 0; // 점수 저장
 
@@ -51,14 +53,18 @@ void LCD_game_start(void) {
 
 void Quiz_1(void) {     // 꽉 찬 CLCD의 문자들 중 다른 영어 문자 1개 찾기
     Cursor_Home();
-
+/*
     LCD_STR("AAAAAAAAAAAAAAAA");
     LCD_pos(1,0);
     LCD_STR("AAAAAAAAAAAAAAAA");
     // A 문자로 32칸 다 채움
+*/
+    Byte answer_row = (unsigned char)get_random(2);    // 0, 1행 중 랜덤 하나 선택
+    Byte answer_col = (unsigned char)get_random(16);   // 0~15열 중 랜덤 하나 선택
 
-    Byte answer_row = get_random(2);    // 0, 1행 중 랜덤 하나 선택
-    Byte answer_col = get_random(16);   // 0~15열 중 랜덤 하나 선택
+    LCD_pos(1,0);
+    LCD_CHAR(answer_row + 0x30);
+    LCD_CHAR(answer_col + 0x30);
 
     LCD_pos(answer_row, answer_col);
     LCD_STR("B");               // 랜덤한 행,열에 B 문자 출력
@@ -105,6 +111,7 @@ void Quiz_2(void) {
     // CGROM- '식': 0x00, '사': 0x01, '샤': 0x02
 
     Cursor_Home();
+
 }
 
 void main(void) {
@@ -125,6 +132,7 @@ void main(void) {
     delay_ms(10);
 
     while (1) {
+        second_counter();
         if ((PIND & 0xFF) == 0b01111111) {  // PD7 눌러서 퀴즈 시작
             // 테스트할 때에는 rxdata == 'A'로 변경
             start_flag = 1;

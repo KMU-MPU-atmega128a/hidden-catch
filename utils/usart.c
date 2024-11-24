@@ -1,11 +1,4 @@
-#include "utils.h"
-
-void LED_correct(void) {  // 정답 시 LED 전체 점등 함수
-    PORTB = 0x00; delay_ms(250);
-    PORTB = 0xFF; delay_ms(250);
-    PORTB = 0x00; delay_ms(250);
-    PORTB = 0xFF; delay_ms(250);
-}
+#include "usart.h"
 
 Byte txdata = 0;    // 게임 종료 시 'B' 전송
 Byte rxdata = 0;    // 'A' 수신 시 게임 시작
@@ -29,21 +22,3 @@ void Init_USART0(void) {
 
     SREG |= 0x80;  // allow all interrupts
 }
-
-void Init_Timer2(void) {
-    TCCR2 = (1 << WGM21) | (1 << CS22) | (1 << CS21);   // CTC 모드, 분주비 256
-    OCR2 = 250;
-    TIMSK |= (1 << OCIE2);
-    TCNT2 = 0;
-}
-
-#pragma interrupt_handler timer2_comp_isr: iv_TIM2_COMP
-unsigned long long random_seed = 0;     // random seed (8 bytes)
-unsigned long long n = 0;
-
-void timer2_comp_isr(void) {
-    random_seed++;
-    if (random_seed > 500) n++;
-} // random_seed++ every 4ms
-
-int get_random(int max) { return n % max; }
