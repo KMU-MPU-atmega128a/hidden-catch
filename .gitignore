@@ -1,17 +1,13 @@
 *.bin
-*.cbp
 *.cof
 *.dbg
 *.depend
 *.default
 *.elf
 *.hex
-*.layout
 *.lst
 *.mp
-*.prj
 *.aws
-*.aps
 
 .objs/
 
