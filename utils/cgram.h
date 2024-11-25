@@ -9,5 +9,6 @@ void CGRAM_set_menu(void);
 void LCD_menu(void);
 void CGRAM_set_quiz2(void);
 void CGRAM_set_quiz3(void);
+void CGRAM_set_quiz4(void);
 
 #endif

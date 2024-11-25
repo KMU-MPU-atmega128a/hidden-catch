@@ -130,6 +130,14 @@ void Quiz_1(void) {     // 꽉 찬 CLCD의 문자들 중 다른 영어 문자 1개 찾기
     Cursor_Home();      // lCD 커서 홈으로 이동
 }
 
+void choice_detector(Byte D) {  // 사용자 선택 (PD4~PD7) 확인 함수
+    switch (D) {
+        case 0b11101111: choice[1] = 1; break;  // PD4, 1번 선택
+        case 0b11011111: choice[2] = 1; break;  // PD5, 1번 선택
+        case 0b10111111: choice[3] = 1; break;  // PD6, 1번 선택
+        case 0b01111111: choice[4] = 1; break;  // PD7, 1번 선택
+    }
+}
 
 void Quiz_2(void) {
     Cursor_Home();
@@ -141,12 +149,8 @@ void Quiz_2(void) {
     ans = 3;            //* 정답 3번 (임시, 난수 작성 후 변경)
     while (flags[2] == 1) {     // 2번 sequence 진행 중
         Byte D = PIND & 0xFF;
-        switch (D) {
-            case 0b11101111: choice[1] = 1; break;  // PD4, 1번 선택
-            case 0b11011111: choice[2] = 1; break;  // PD5, 1번 선택
-            case 0b10111111: choice[3] = 1; break;  // PD6, 1번 선택
-            case 0b01111111: choice[4] = 1; break;  // PD7, 1번 선택
-        }
+        choice_detector(D);
+
         if (D != 0xFF) {
             if (check_answer(choice, ans) == 1) { // 정답 선지 선택, 해당 버튼 눌렀을 경우
                 flags[2] = 0; score++;  // flag 2 내림 (q2 sequence 종료), score 증가
@@ -155,7 +159,7 @@ void Quiz_2(void) {
                 LED_correct(); LCD_Clear(); // LED 점등, 이후 LCD clear, 커서 제거
                 LED_scoreboard(2);          // 2번 문제 정답 표기
 
-                flags[3] = 1;   // 2번 문제 sequence 준비
+                flags[3] = 1;   // 3번 문제 sequence 준비
                 break;
             }
             else if (check_answer(choice, ans) == 0) { // 다른 선지 선택해서 틀렸을 경우
@@ -166,7 +170,6 @@ void Quiz_2(void) {
             }
         }
     }
-
 }
 
 void Quiz_3(void) {
@@ -177,23 +180,19 @@ void Quiz_3(void) {
     choice_generator(3); // 문제 출제 완료
 
     ans = 3;            //* 정답 3번 (임시, 난수 작성 후 변경)
-    while (flags[3] == 1) {     // 2번 sequence 진행 중
+    while (flags[3] == 1) {     // 3번 sequence 진행 중
         Byte D = PIND & 0xFF;
-        switch (D) {
-            case 0b11101111: choice[1] = 1; break;  // PD4, 1번 선택
-            case 0b11011111: choice[2] = 1; break;  // PD5, 1번 선택
-            case 0b10111111: choice[3] = 1; break;  // PD6, 1번 선택
-            case 0b01111111: choice[4] = 1; break;  // PD7, 1번 선택
-        }
+        choice_detector(D);
+
         if (D != 0xFF) {
             if (check_answer(choice, ans) == 1) { // 정답 선지 선택, 해당 버튼 눌렀을 경우
                 flags[3] = 0; score++;  // flag 3 내림 (q3 sequence 종료), score 증가
 
                 LCD_Clear(); Cursor_Home(); LCD_STR("Correct!");    // 정답 메세지 출력
                 LED_correct(); LCD_Clear(); // LED 점등, 이후 LCD clear, 커서 제거
-                LED_scoreboard(3);          // 2번 문제 정답 표기
+                LED_scoreboard(3);          // 3번 문제 정답 표기
 
-                flags[3] = 1;   // 2번 문제 sequence 준비
+                flags[4] = 1;   // 4번 문제 sequence 준비
                 break;
             }
             else if (check_answer(choice, ans) == 0) { // 다른 선지 선택해서 틀렸을 경우
@@ -204,7 +203,13 @@ void Quiz_3(void) {
             }
         }
     }
+}
 
+void Quiz_4(void) {
+    Cursor_Home();
+    clear_choice(choice);
+
+    CGRAM_set_quiz4();
 }
 
 void main(void) {
@@ -240,6 +245,7 @@ void main(void) {
             if (flags[1] == 1) Quiz_1();
             if (flags[2] == 1) Quiz_2();
             if (flags[3] == 1) Quiz_3();
+            if (flags[4] == 1) Quiz_4();
         }
 
     }   // end of while loop
