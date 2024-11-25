@@ -57,7 +57,7 @@ void LCD_menu(void) {   // 초기 문자 "다른문자찾기" LCD에 출력
         LCD_delay(1);
     }
 }
-
+// 2번: '식사', '식샤'
 void CGRAM_set_quiz2(void) {
     Byte q2_1[] = {0x09, 0x09, 0x09, 0x15, 0x01, 0x0E, 0x02, 0x02}; // '식'
     Byte q2_2[] = {0x02, 0x0A, 0x0A, 0x0B, 0x16, 0x02, 0x02, 0x02}; // '사'
@@ -81,12 +81,12 @@ void CGRAM_set_quiz2(void) {
         LCD_delay(1);
     }
 }
-/* 3번 CGRAM data (생각중...)
+// 3번: '금지어', '금기어' (or '금지', '금기')
 void CGRAM_set_quiz3(void) {
-    Byte q3_1[] = {}
-    Byte q3_2[];
-    Byte q3_3[];
-    Byte q3_4[];
+    Byte q3_1[] = {0x0E, 0x02, 0x02, 0x1F, 0x00, 0x0E, 0x0A, 0x0E}; // '금'
+    Byte q3_2[] = {0x01, 0x1D, 0x05, 0x05, 0x05, 0x05, 0x01, 0x01}; // '기'
+    Byte q3_3[] = {0x01, 0x1D, 0x09, 0x09, 0x15, 0x01, 0x01, 0x01}; // '지'
+    Byte q3_4[] = {0x01, 0x09, 0x15, 0x17, 0x15, 0x15, 0x09, 0x01}; // '어'
 
     LCD_Comm(0x40);
     for (int i = 0; i < 8; i++) {
@@ -112,4 +112,36 @@ void CGRAM_set_quiz3(void) {
         LCD_delay(1);
     }
 
-}*/
+}
+/*
+// 4번 CGRAM data (마지막 한글 문제, 생각 중)
+void CGRAM_set_quiz4(void) {
+    Byte q4_1[];
+    Byte q4_2[];
+    Byte q4_3[];
+    // Byte q4_4[];
+
+    LCD_Comm(0x40);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_1[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x48);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_2[i]);
+        LCD_delay(1);
+    }
+
+    LCD_Comm(0x50);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_3[i]);
+        LCD_delay(1);
+    }
+    LCD_Comm(0x58);
+    for (int i = 0; i < 8; i++) {
+        LCD_Data(q3_4[i]);
+        LCD_delay(1);
+    }
+}
+*/
