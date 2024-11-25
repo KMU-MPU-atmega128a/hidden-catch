@@ -5,9 +5,9 @@
 #include "my128.h"
 #include "lcd.h"
 
-int check_answer(int choice[], int ans);
-void clear_choice(int choice[]);
+Byte check_answer(Byte choice[], Byte ans);
+void clear_choice(Byte choice[]);
 
-void choice_generator(void);
+void choice_generator(Byte n);
 
 #endif

@@ -5,6 +5,6 @@
 #include "my128.h"
 
 void LED_correct(void);
-void LED_scoreboard(int n);
+void LED_scoreboard(Byte n);
 
 #endif
